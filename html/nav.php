@@ -13,8 +13,7 @@
             <li class="nav-item"><a href="prix.php" class="nav-link">Prix</a></li>
             <li class="nav-item"><a href="moncompte.php" class="nav-link">Mon Compte</a></li>
 </html>
-            <?php 
-              $db=new PDO('mysql:host=localhost; dbname=MariaTeam','root','root');
+            <?php         
               $getRole=$db->query("SELECT Role FROM Client WHERE idClient='".$_SESSION['idClient']."'");
 			  $row=$getRole->fetch();
 			  $role=$row['Role'];

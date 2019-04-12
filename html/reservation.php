@@ -1,5 +1,4 @@
 <?php
-$db=new PDO('mysql:host=localhost; dbname=MariaTeam','root','root');
 include 'start.php';
 start();
 ?>
@@ -125,59 +124,45 @@ start();
 										echo'<div class="block-17">';
 											echo'<form action="reservation.php?destination#tab" method="post" class="d-block d-lg-flex">';
 												echo'<div class="fields d-block d-lg-flex">';
-											
 											// affichage select
 
-                            $getNomDepart = $db->prepare("SELECT DISTINCTROW P.nomPort FROM Ports P,Liaison L,secteur S WHERE P.codePort=L.codePort AND L.NomSecteur = S.NomSecteur AND idSecteur= ".$row['idSecteur']." ORDER BY `L`.`codePort_Ports` ASC");
-                            $getNomDepart->setFetchMode(PDO:: FETCH_ASSOC);
-                            $getNomDepart->execute();
+                      $getNomDepart = $db->prepare("SELECT DISTINCTROW P.nomPort FROM Ports P,Liaison L,secteur S WHERE P.codePort=L.codePort AND L.NomSecteur = S.NomSecteur AND idSecteur= ".$row['idSecteur']." ORDER BY `L`.`codePort_Ports` ASC");
+                      $getNomDepart->setFetchMode(PDO:: FETCH_ASSOC);
+                      $getNomDepart->execute();
 
-														echo'<div class="select-wrap one-third">';
-															echo'<div class="icon"><span class="ion-ios-arrow-down"></span></div>';
-																echo"<select name='depart' id='depart' class='form-control' onchange='port_arrivee(this.value)'>";
-                                echo'<option disabled selected>Destination de depart</option>';
-                               
-
-                                while($rowD=$getNomDepart->fetch() )
-                                {
-
-                                  $getCode = $db->query("SELECT codePort FROM Ports WHERE nomPort='".$rowD['nomPort']."'");
-                                  $row=$getCode->fetch();
-                                  $code = $row['codePort'];
-
-                                  echo'<option value='.$code.' style="color:#000;">'.$rowD['nomPort'].'</option>';
-
-                                }
-																echo'</select>';
-														echo'</div>';
-
-                            ?>
-                            <script>
-                              function port_arrivee(port) {
-                                    var xhttp;
-                                    xhttp = new XMLHttpRequest();
-                                    xhttp.onreadystatechange = function() {
-                                      if (this.readyState == 4 && this.status == 200) {
-                                      document.getElementById("port_arrivee").innerHTML = this.responseText;
-                                      }
-                                    };
-                                    xhttp.open("GET", "liaisonPort.php?port="+port, true);   
-                                    xhttp.send();
-                              }
-
-                            </script>
-
-                            <div id="port_arrivee">
-                              <div class="select-wrap one-third">
-                               <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                               <select name="arrivee" id="arrivee" class="form-control">
-                                <option disabled selected>Destination d'arrivee</option>
-                               </select>
-                              </div> 
-                            </div>
+                      $getNomArrivee = $db->prepare("SELECT DISTINCTROW P.nomPort FROM Ports P,Liaison L,secteur S WHERE P.codePort=L.codePort_Ports AND L.NomSecteur = S.NomSecteur AND idSecteur= ".$row['idSecteur']." ORDER BY `L`.`codePort_Ports` ASC");
+                      $getNomArrivee->setFetchMode(PDO:: FETCH_ASSOC);
+                      $getNomArrivee->execute();
 
 
-                            <?php
+                
+                      echo'<div class="select-wrap one-third">';
+                        echo'<div class="icon"><span class="ion-ios-arrow-down"></span></div>';
+                          echo'<select name="depart" id="depart" class="form-control">';
+                          echo'<option disabled selected>Destination de depart</option>';
+
+                          while($rowD=$getNomDepart->fetch() )
+                          {
+
+                            echo'<option value="'.$rowD['nomPort'].'" style="color:#000;">'.$rowD['nomPort'].'</option>';
+
+                          }
+                          echo'</select>';
+                      echo'</div>';
+
+
+                      echo'<div class="select-wrap one-third">';
+                        echo'<div class="icon"><span class="ion-ios-arrow-down"></span></div>';
+                          echo'<select name="arrivee" id="arrivee" class="form-control">';
+                          echo"<option disabled selected>Destination d'arrivée</option>";
+                            while($rowA=$getNomArrivee->fetch() )
+                          {
+
+                            echo'<option value="'.$rowA['nomPort'].'" style="color:#000;">'.$rowA['nomPort'].'</option>';
+
+                          }
+                          echo'</select>';
+                      echo'</div>'; 
 
 												///////	
 												echo'</div>';
@@ -201,9 +186,6 @@ start();
               $depart=$_POST['depart'];
 
               $arrivee=$_POST['arrivee'];
-
-              var_dump($_POST);
-              exit;
 
 
               $getCodeDepart = $db->prepare('SELECT codePort From Ports where nomPort=? ');
@@ -278,20 +260,14 @@ start();
     							echo'<th scope="row">'.$info['numeroIdentifiant'].'</th>';		  
     							echo'<td>'.$info['heureDeDepart'].'</td>';		  
     							echo'<td>'.$info['date'].'</td>';		  
-    		                	echo'<td>'.$info['NomBateau'].'</td>';	
-    		                	echo'<td>'.$info['PassagerRestant'].'</td>';
-    		                	echo'<td>'.$info['VehInf2mRestant'].'</td>';
-    		                	echo'<td>'.$info['VehSup2mRestant'].'</td>';
-
+    		          echo'<td>'.$info['NomBateau'].'</td>';	
+    		          echo'<td>'.$info['PassagerRestant'].'</td>';
+    		          echo'<td>'.$info['VehInf2mRestant'].'</td>';
+    		          echo'<td>'.$info['VehSup2mRestant'].'</td>';
     							echo'<td><div class="radio"><label><input type="radio" value="'.$info['numeroIdentifiant'].'" name="optradio" id="optradio" checked></label></div></td>';		  
   						  echo'</tr>';	
 
 						  	}
-
-						  	if($test == Null && $Liaison != Null )
-						  		{
-						  			echo'<h1 style="color:#FF0000;">AUCUNE TRAVERSEE DISPONIBLE</h1>';
-						  		}
 
 
 
@@ -358,20 +334,33 @@ start();
 
           if(isset($_GET['reserver']))
            {
+             $radio= $_POST['optradio'];
+             $enfant = 0;
+             $adulte = 0;
+             $junior = 0;
+             $vhInf4 = 0;
+             $vhInf5 = 0;
+             $fourgon = 0;
+             $campingcar = 0;
+             $camion = 0;
+             $voiture = 0;
 
-           	if(!isset($_POST['optradio'])){$radio = 0;}else{$radio= $_POST['optradio'];}
-           	if(!isset($_POST['nbAdulte'])){$adulte = 0;}else{$adulte= $_POST['nbAdulte'];}
-           	if(!isset($_POST['nbJunior'])){$junior = 0;}else{$junior= $_POST['nbJunior'];}
-           	if(!isset($_POST['nbEnfant'])){$enfant = 0;}else{$enfant= $_POST['nbEnfant'];}
 
-           	if($_POST['vhInf4']==Null){$vhInf4 = 0;}else{$vhInf4= $_POST['vhInf4'];}
+             if($_POST['nbEnfant']!=null){$enfant = $_POST['nbEnfant'];}
+             if($_POST['nbJunior']!=null){$junior = $_POST['nbJunior'];}
+             if($_POST['nbAdulte']!=null){$adulte = $_POST['nbAdulte'];}
 
-           	if(!isset($_POST['vhInf5'])){$vhInf5 = 0;}else{$vhInf5= $_POST['vhInf5'];}
-           	if(!isset($_POST['fourgon'])){$fourgon = 0;}else{$fourgon= $_POST['fourgon'];}
-           	if(!isset($_POST['campingcar'])){$campingcar = 0;}else{$campingcar= $_POST['campingcar'];}
-           	if(!isset($_POST['camion'])){$camion = 0;}else{$camion= $_POST['camion'];}
+             if($_POST['vhInf4']!=null){$vhInf4 = $_POST['vhInf4'];}
+             if($_POST['vhInf5']!=null){$vhInf5 = $_POST['vhInf5'];}
+             if($_POST['fourgon']!=null){$fourgon = $_POST['fourgon'];}
+             if($_POST['campingcar']!=null){$campingcar = $_POST['campingcar'];}
+             if($_POST['camion']!=null){$camion = $_POST['camion'];}
 
-            $voiture = $vhInf4+$vhInf5+$fourgon+$campingcar+$camion;
+             if($vhInf4 !=0 || $vhInf5!=0 || $fourgon !=0 || $camion !=0)
+             {
+                $voiture = $vhInf4+$vhInf5+$fourgon+$campingcar+$camion;
+             }
+            
 
             $getL = $db->prepare("SELECT P.idLiaison FROM traversee T, Periode P,Liaison L WHERE T.idPeriode = P.idPeriode AND T.numeroIdentifiant=?");
             $getL->execute([$radio]);
@@ -481,10 +470,9 @@ start();
            		  $getDateResa = $db->query("SELECT date FROM traversee WHERE numeroIdentifiant = ".$radio."");
                   $row = $getDateResa->fetch(); 
                   $dateResa = $row['date'];
-
-                 
-
                   ?>
+
+                  
 
                   <li class="list-group-item d-flex justify-content-between">
                     <span>Total (EUR)</span>
@@ -516,12 +504,9 @@ start();
 						             $totalPassager = $PlacesA1+$PlacesA2+$PlacesA3;
 
 						             $sql=$db->prepare("INSERT INTO Reservation (MontantARegler,date,Heure,numeroIdentifiant,idClient,PlacesA1,PlacesA2,PlacesA3,PlacesB1,PlacesB2,PlacesC1,PlacesC2,PlacesC3) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-						            $sql->execute([$MontantARegler, $dateReservation,$heure, $NumeroIdentifiant, $idClient,$PlacesA1,$PlacesA2,$PlacesA3,$PlacesB1,$PlacesB2,$PlacesC1,$PlacesC2,$PlacesC3]);
-
+						             $sql->execute([$MontantARegler, $dateReservation,$heure, $NumeroIdentifiant, $idClient,$PlacesA1,$PlacesA2,$PlacesA3,$PlacesB1,$PlacesB2,$PlacesC1,$PlacesC2,$PlacesC3]);
 			
-                                    $update=$db->query('UPDATE traversee SET PassagerRestant=PassagerRestant-'.$totalPassager.',VehInf2mRestant=VehInf2mRestant-'.$vhInf4.',VehSup2mRestant=VehSup2mRestant-'.$nbSup2M.' WHERE numeroIdentifiant='.$radio.'');
-
-					
+                        //$update=$db->query('UPDATE traversee SET PassagerRestant=PassagerRestant-'.$totalPassager.',VehInf2mRestant=VehInf2mRestant-'.$vhInf4.',VehSup2mRestant=VehSup2mRestant-'.$nbSup2M.' WHERE numeroIdentifiant='.$radio.'');
 
 						            echo'<h3 style="color:red;">Enregistrement reussi</h3>';
 

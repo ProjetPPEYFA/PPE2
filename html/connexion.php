@@ -1,6 +1,5 @@
 <?php
-
-$db=new PDO('mysql:host=localhost; dbname=MariaTeam','root','root');
+			require 'connect.php';
 
 			$username=$_POST['username'];
 			$pass=$_POST['password'];
