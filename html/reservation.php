@@ -1,5 +1,4 @@
 <?php
-$db=new PDO('mysql:host=localhost; dbname=MariaTeam','root','root');
 include 'start.php';
 start();
 ?>
@@ -125,59 +124,45 @@ start();
 										echo'<div class="block-17">';
 											echo'<form action="reservation.php?destination#tab" method="post" class="d-block d-lg-flex">';
 												echo'<div class="fields d-block d-lg-flex">';
-											
 											// affichage select
 
-                            $getNomDepart = $db->prepare("SELECT DISTINCTROW P.nomPort FROM Ports P,Liaison L,secteur S WHERE P.codePort=L.codePort AND L.NomSecteur = S.NomSecteur AND idSecteur= ".$row['idSecteur']." ORDER BY `L`.`codePort_Ports` ASC");
-                            $getNomDepart->setFetchMode(PDO:: FETCH_ASSOC);
-                            $getNomDepart->execute();
+                      $getNomDepart = $db->prepare("SELECT DISTINCTROW P.nomPort FROM Ports P,Liaison L,secteur S WHERE P.codePort=L.codePort AND L.NomSecteur = S.NomSecteur AND idSecteur= ".$row['idSecteur']." ORDER BY `L`.`codePort_Ports` ASC");
+                      $getNomDepart->setFetchMode(PDO:: FETCH_ASSOC);
+                      $getNomDepart->execute();
 
-														echo'<div class="select-wrap one-third">';
-															echo'<div class="icon"><span class="ion-ios-arrow-down"></span></div>';
-																echo"<select name='depart' id='depart' class='form-control' onchange='port_arrivee(this.value)'>";
-                                echo'<option disabled selected>Destination de depart</option>';
-                               
-
-                                while($rowD=$getNomDepart->fetch() )
-                                {
-
-                                  $getCode = $db->query("SELECT codePort FROM Ports WHERE nomPort='".$rowD['nomPort']."'");
-                                  $row=$getCode->fetch();
-                                  $code = $row['codePort'];
-
-                                  echo'<option value='.$code.' style="color:#000;">'.$rowD['nomPort'].'</option>';
-
-                                }
-																echo'</select>';
-														echo'</div>';
-
-                            ?>
-                            <script>
-                              function port_arrivee(port) {
-                                    var xhttp;
-                                    xhttp = new XMLHttpRequest();
-                                    xhttp.onreadystatechange = function() {
-                                      if (this.readyState == 4 && this.status == 200) {
-                                      document.getElementById("port_arrivee").innerHTML = this.responseText;
-                                      }
-                                    };
-                                    xhttp.open("GET", "liaisonPort.php?port="+port, true);   
-                                    xhttp.send();
-                              }
-
-                            </script>
-
-                            <div id="port_arrivee">
-                              <div class="select-wrap one-third">
-                               <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                               <select name="arrivee" id="arrivee" class="form-control">
-                                <option disabled selected>Destination d'arrivee</option>
-                               </select>
-                              </div> 
-                            </div>
+                      $getNomArrivee = $db->prepare("SELECT DISTINCTROW P.nomPort FROM Ports P,Liaison L,secteur S WHERE P.codePort=L.codePort_Ports AND L.NomSecteur = S.NomSecteur AND idSecteur= ".$row['idSecteur']." ORDER BY `L`.`codePort_Ports` ASC");
+                      $getNomArrivee->setFetchMode(PDO:: FETCH_ASSOC);
+                      $getNomArrivee->execute();
 
 
-                            <?php
+                
+                      echo'<div class="select-wrap one-third">';
+                        echo'<div class="icon"><span class="ion-ios-arrow-down"></span></div>';
+                          echo'<select name="depart" id="depart" class="form-control">';
+                          echo'<option disabled selected>Destination de depart</option>';
+
+                          while($rowD=$getNomDepart->fetch() )
+                          {
+
+                            echo'<option value="'.$rowD['nomPort'].'" style="color:#000;">'.$rowD['nomPort'].'</option>';
+
+                          }
+                          echo'</select>';
+                      echo'</div>';
+
+
+                      echo'<div class="select-wrap one-third">';
+                        echo'<div class="icon"><span class="ion-ios-arrow-down"></span></div>';
+                          echo'<select name="arrivee" id="arrivee" class="form-control">';
+                          echo"<option disabled selected>Destination d'arrivée</option>";
+                            while($rowA=$getNomArrivee->fetch() )
+                          {
+
+                            echo'<option value="'.$rowA['nomPort'].'" style="color:#000;">'.$rowA['nomPort'].'</option>';
+
+                          }
+                          echo'</select>';
+                      echo'</div>'; 
 
 												///////	
 												echo'</div>';

@@ -1,9 +1,10 @@
 <?php
+include 'connect.php';
 function start() 
 {
   session_start(); 
 
-  $db=new PDO('mysql:host=localhost; dbname=MariaTeam','root','root');
+  include 'connect.php';
 
   $check=false;
 
