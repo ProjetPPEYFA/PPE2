@@ -23,6 +23,8 @@ public class Test {
      */
     public static void main(String[] args) throws IOException {
         
+        /*
+        
         Equipement equip1 = new Equipement("id1", "Coque Renforcée");
         Equipement equip2 = new Equipement("id2", "Gyroscope");
 
@@ -35,7 +37,11 @@ public class Test {
         Desktop.getDesktop().open(new File("C:\\Users\\mahammed.yazid\\Desktop\\test.pdf"));
         
         
-        System.out.println(bateau1.versChaine());
+        System.out.println(bateau1.versChaine());*/
+        
+        /* DBConnect con = new DBConnect();
+        con.getBateau();
+        con.getEquipement(1); */
     }
     
 }
