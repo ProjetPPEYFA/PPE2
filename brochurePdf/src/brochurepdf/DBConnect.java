@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,6 +21,28 @@ public class DBConnect {
     private Connection con;
     private Statement st;
     private ResultSet rs;
+    
+    public ArrayList<BateauVoyageur> bateauList(){
+        ArrayList<BateauVoyageur> lesBateaux = new ArrayList();
+        try{
+            
+            String query = "SELECT * FROM bateau";
+            rs = st.executeQuery(query);
+            System.out.println("Records from Database / bateau");
+            BateauVoyageur bateau;
+            while(rs.next())
+            {
+                bateau = new BateauVoyageur(rs.getInt("idBateau"),rs.getString("NomBateau"),rs.getDouble("LongueurEnMetre"),rs.getDouble("LargeurEnMetre"),rs.getDouble("VitesseMaxEnNoeud"));
+                lesBateaux.add(bateau);
+            }
+            
+        }catch(Exception ex){
+            System.out.println(ex);
+        }
+        
+        return lesBateaux;
+        
+    }
     
     public DBConnect(){
         try{ 
@@ -32,22 +56,7 @@ public class DBConnect {
         }   
     }
     
-    public void getBateau(){
-        try{
-            
-            String query = "SELECT * FROM bateau";
-            rs = st.executeQuery(query);
-            System.out.println("Records from Database / bateau");
-            while(rs.next())
-            {
-                String id=rs.getString("idBateau");
-                System.out.println("id du bateau "+id);
-            }
-            
-        }catch(Exception ex){
-            System.out.println(ex);
-        }
-    }
+    
     
     public void getEquipement(int idBateau){
         try{
@@ -66,19 +75,45 @@ public class DBConnect {
         }
     }
     
-    public void Insert(String code,String code_categorie,String designation,int quantite,double prix_unitaire,int date){     
+    public void InsertBateau(String Nom,Double Largeur,Double Longeur,Double Vitesse,String path){     
         try{
-            
-     
-            String query2 = "INSERT INTO `xelfi`.`article` (`code`, `code_categorie`,designation,quantite,prix_unitaire,date) VALUES ('"+code+"', '"+code_categorie+"','"+designation+"','"+quantite+"','"+prix_unitaire+"','"+date+"'); ";
-            st.executeUpdate(query2);
-            System.out.println("Insert into Database");
-            
-            
+            String query = "INSERT INTO bateau (nomBateau,vitesseMaxEnNoeud,LongueurEnMetre,LargeurEnMetre,PathImage) VALUES ('"+Nom+"', "+Largeur+","+Longeur+","+Vitesse+",'"+path+"'); ";
+            st.executeUpdate(query);
+            System.out.println("Insert into Database"); 
         }catch(Exception ex){
             System.out.println(ex);
-        }
-        
+        }  
+    }
+    
+    public void ModifierBateau(int id,String Nom,Double Largeur,Double Longeur,Double Vitesse,String path){     
+        try{
+            String query = "UPDATE bateau SET NomBateau = '"+Nom+"',LongueurEnMetre = "+Largeur+",LargeurEnMetre = "+Longeur+",VitesseMaxEnNoeud = "+Vitesse+", PathImage = '"+path+"' WHERE idBateau="+id+"; ";
+            st.executeUpdate(query);
+            System.out.println("upload Database"); 
+        }catch(Exception ex){
+            System.out.println(ex);
+        }  
+    }
+    
+    public void ModifierBateau(int id,String Nom,Double Largeur,Double Longeur,Double Vitesse){     
+        try{
+            String query = "UPDATE bateau SET NomBateau = '"+Nom+"',LongueurEnMetre = "+Largeur+",LargeurEnMetre = "+Longeur+",VitesseMaxEnNoeud = "+Vitesse+" WHERE idBateau="+id+"; ";
+            System.out.println(query);
+            st.executeUpdate(query);
+            System.out.println("upload Database"); 
+        }catch(Exception ex){
+            System.out.println(ex);
+        }  
+    }
+    
+    public void DeleteBateau(int id){
+        try{
+            String query = "DELETE FROM bateau WHERE idBateau="+id+" ";
+            st.executeUpdate(query);
+            System.out.println("Delete From Database"); 
+        }catch(Exception ex){
+            System.out.println(ex);
+        }  
     }
     
 }
