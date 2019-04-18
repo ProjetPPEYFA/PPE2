@@ -48,10 +48,15 @@ public class BateauVoyageur extends Bateau {
     
     
     
-    public BateauVoyageur(String unId, String unNom, double uneLongueur, double uneLargeur, double uneVitesse, String uneImage){
+    public BateauVoyageur(int unId, String unNom, double uneLongueur, double uneLargeur, double uneVitesse, String uneImage){
         super(unId, unNom, uneLongueur, uneLargeur);
         this.setVitesseBatVoy(uneVitesse);
         this.setImageBatVoy(uneImage);
+    }
+    
+    public BateauVoyageur(int unId, String unNom, double uneLongueur, double uneLargeur, double uneVitesse){
+        super(unId, unNom, uneLongueur, uneLargeur);
+        this.setVitesseBatVoy(uneVitesse);
     }
     
     public String listeEquipements(){
