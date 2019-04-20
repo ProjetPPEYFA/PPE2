@@ -32,7 +32,7 @@ public class DBConnect {
             BateauVoyageur bateau;
             while(rs.next())
             {
-                bateau = new BateauVoyageur(rs.getInt("idBateau"),rs.getString("NomBateau"),rs.getDouble("LongueurEnMetre"),rs.getDouble("LargeurEnMetre"),rs.getDouble("VitesseMaxEnNoeud"));
+                bateau = new BateauVoyageur(rs.getInt("idBateau"),rs.getString("NomBateau"),rs.getDouble("LongueurEnMetre"),rs.getDouble("LargeurEnMetre"),rs.getDouble("VitesseMaxEnNoeud"),rs.getString("PathImage"));
                 lesBateaux.add(bateau);
             }
             
@@ -88,17 +88,6 @@ public class DBConnect {
     public void ModifierBateau(int id,String Nom,Double Largeur,Double Longeur,Double Vitesse,String path){     
         try{
             String query = "UPDATE bateau SET NomBateau = '"+Nom+"',LongueurEnMetre = "+Largeur+",LargeurEnMetre = "+Longeur+",VitesseMaxEnNoeud = "+Vitesse+", PathImage = '"+path+"' WHERE idBateau="+id+"; ";
-            st.executeUpdate(query);
-            System.out.println("upload Database"); 
-        }catch(Exception ex){
-            System.out.println(ex);
-        }  
-    }
-    
-    public void ModifierBateau(int id,String Nom,Double Largeur,Double Longeur,Double Vitesse){     
-        try{
-            String query = "UPDATE bateau SET NomBateau = '"+Nom+"',LongueurEnMetre = "+Largeur+",LargeurEnMetre = "+Longeur+",VitesseMaxEnNoeud = "+Vitesse+" WHERE idBateau="+id+"; ";
-            System.out.println(query);
             st.executeUpdate(query);
             System.out.println("upload Database"); 
         }catch(Exception ex){

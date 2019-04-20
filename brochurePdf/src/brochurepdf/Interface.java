@@ -18,7 +18,7 @@ public class Interface extends javax.swing.JFrame {
         DBConnect con = new DBConnect();        
         ArrayList<BateauVoyageur>list = con.bateauList();
         DefaultTableModel model = (DefaultTableModel)jTableBateau.getModel();
-        Object[] row = new Object[5];
+        Object[] row = new Object[6];
         model.setRowCount(0);
         for(int i=0;i<list.size();i++)
         {
@@ -27,6 +27,7 @@ public class Interface extends javax.swing.JFrame {
          row[2]=list.get(i).getLongueurBateau();
          row[3]=list.get(i).getLargeurBateau();
          row[4]=list.get(i).getVitesseBatVoy();
+         row[5]=list.get(i).getImageBatVoy();
          model.addRow(row); 
         }
           
@@ -79,7 +80,7 @@ public class Interface extends javax.swing.JFrame {
 
             },
             new String [] {
-                "id", "Nom", "Longueur", "Largeur", "Vitesse en noeud"
+                "id", "Nom", "Longueur", "Largeur", "Vitesse en noeud", "chemin img"
             }
         ));
         jTableBateau.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -143,9 +144,11 @@ public class Interface extends javax.swing.JFrame {
                         .addComponent(jButtonDelete)))
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonReload)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonReload)
+                        .addGap(0, 617, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -174,7 +177,7 @@ public class Interface extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addContainerGap(213, Short.MAX_VALUE))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
 
         pack();
@@ -196,6 +199,7 @@ public class Interface extends javax.swing.JFrame {
         jTextFieldLongueur.setText("Longueur");
         jTextFieldLargeur.setText("Largeur");
         jTextFieldVitesse.setText("Vitesse");
+        jTextFieldPath.setText("Chemin image");
         
         reloadBateau();
         
@@ -218,7 +222,7 @@ public class Interface extends javax.swing.JFrame {
         double doubleLongueur = Double.parseDouble(longueur);
         double doubleVitesse = Double.parseDouble(vitesse);
         
-        con.ModifierBateau((int) intId,nom,doubleLongueur, doubleLargeur, doubleVitesse);
+        con.ModifierBateau((int) intId,nom,doubleLongueur, doubleLargeur, doubleVitesse,path);
         reloadBateau();
     }//GEN-LAST:event_jButtonModifierActionPerformed
 
@@ -248,11 +252,14 @@ public class Interface extends javax.swing.JFrame {
         String longueur = jTableBateau.getModel().getValueAt(ligne, 2).toString();
         String largeur = jTableBateau.getModel().getValueAt(ligne, 3).toString();
         String vitesse = jTableBateau.getModel().getValueAt(ligne, 4).toString();
+        String path = jTableBateau.getModel().getValueAt(ligne, 5).toString();
         
         jTextFieldNom.setText(nomBateau);
         jTextFieldLongueur.setText(longueur);
         jTextFieldLargeur.setText(largeur);
         jTextFieldVitesse.setText(vitesse);
+        jTextFieldPath.setText(path);
+        
     }//GEN-LAST:event_jTableBateauMouseClicked
 
     /**
