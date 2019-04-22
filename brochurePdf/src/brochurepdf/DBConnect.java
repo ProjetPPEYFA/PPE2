@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -37,7 +38,7 @@ public class DBConnect {
             }
             
         }catch(Exception ex){
-            System.out.println(ex);
+            JOptionPane.showMessageDialog(null,"Probleme de lecteur de la table bateau : "+ ex);
         }
         
         return lesBateaux;
@@ -52,7 +53,7 @@ public class DBConnect {
             st = con.createStatement();
                     
         }catch(Exception ex){
-            System.out.println("Erro: "+ex);
+            JOptionPane.showMessageDialog(null,"Probleme de connexion à la bdd erreur : "+ex);
         }   
     }
     

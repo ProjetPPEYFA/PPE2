@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  sam. 20 avr. 2019 à 12:34
+-- Généré le :  lun. 22 avr. 2019 à 12:52
 -- Version du serveur :  5.7.24
 -- Version de PHP :  7.2.14
 
@@ -32,23 +32,24 @@ DROP TABLE IF EXISTS `bateau`;
 CREATE TABLE IF NOT EXISTS `bateau` (
   `idBateau` int(11) NOT NULL AUTO_INCREMENT,
   `NomBateau` varchar(50) NOT NULL,
-  `VitesseMaxEnNoeud` int(11) NOT NULL,
-  `LongueurEnMetre` float NOT NULL,
-  `LargeurEnMetre` float NOT NULL,
-  `NbPlacesMaxPassager` int(11) NOT NULL DEFAULT '150',
-  `NbPlacesMaxVInf2` int(11) NOT NULL DEFAULT '50',
-  `NbPlacesMaxVSup2` int(11) NOT NULL DEFAULT '20',
+  `VitesseMaxEnNoeud` double NOT NULL,
+  `LongueurEnMetre` double NOT NULL,
+  `LargeurEnMetre` double NOT NULL,
+  `NbPlacesMaxPassager` int(11) DEFAULT '100',
+  `NbPlacesMaxVInf2` int(11) DEFAULT '50',
+  `NbPlacesMaxVSup2` int(11) DEFAULT '25',
   `PathImage` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`idBateau`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `bateau`
 --
 
 INSERT INTO `bateau` (`idBateau`, `NomBateau`, `VitesseMaxEnNoeud`, `LongueurEnMetre`, `LargeurEnMetre`, `NbPlacesMaxPassager`, `NbPlacesMaxVInf2`, `NbPlacesMaxVSup2`, `PathImage`) VALUES
-(1, 'Titanic', 30, 40, 10, 150, 40, 20, NULL),
-(2, 'LeGoelan', 9, 15, 25, 150, 50, 20, 'i');
+(1, 'Titanic', 30, 40, 10, 150, 40, 20, 'image/Titanic.jpg'),
+(3, 'Adonia', 15, 20, 7, 14, 12, 15, 'image/Ardonia.jpg'),
+(4, 'Balatik', 5.5, 15, 18, 100, 50, 25, 'image/Balatik.jpg');
 
 -- --------------------------------------------------------
 
@@ -324,8 +325,7 @@ INSERT INTO `reservation` (`NumReservation`, `MontantARegler`, `date`, `Heure`, 
 (2, 72, '2019-03-25', '9:52', 12345, '17349', 2, 1, 0, 0, 0, 1, 0, 0),
 (3, 243, '2019-03-25', '10:54', 12345, '2497', 4, 3, 1, 1, 0, 1, 0, 0),
 (5, 0, '2019-04-01', '10:52', 541197, 'S.Trudeau', 2, 1, 0, 1, 0, 0, 0, 0),
-(6, 0, '2019-04-12', '12:34', 1685429, 'admin', 1, 1, 1, 1, 1, 1, 1, 1),
-(7, 44, '2019-04-15', '01:36', 1685429, 'admin', 2, 1, 0, 0, 0, 0, 0, 0);
+(7, 15, '2019-04-12', '13:14', 1685429, 'admin', 1, 0, 0, 0, 0, 0, 0, 0);
 
 --
 -- Déclencheurs `reservation`
