@@ -56,7 +56,7 @@ start();
 			<div class="row">
 				<div class="col-lg-12">
 					<h1 class="page-header" style="text-align: center;">Information du compte</h1>
-				</div>
+				
 				<div class="text">
 					<table class="table" style="margin-top: 8%; margin-bottom: 10%;text-align: center;">
 						<thead class="thead-dark">
@@ -76,20 +76,53 @@ start();
 								$getTableau->setFetchMode(PDO:: FETCH_ASSOC);
 								$getTableau->execute();
 								while ($info=$getTableau->fetch()) {
-								    echo'<tr>';
+								  echo'<tr>';
 										echo'<th scope="row">'.$info['NomClient'].'</th>';		  		  
 										echo'<td>'.$info['PrenomClient'].'</td>';		  
-					                	echo'<td>'.$info['CodePostal'].'</td>';
-					                	echo'<td>'.$info['Ville'].'</td>';
-					                	echo'<td>'.$info['Adresse'].'</td>';
-					                	echo'<td>'.$info['Mail'].'</td>';
-					                	echo'<td>'.$info['NbAchatsFidelisant'].'</td>';		  
+					          echo'<td>'.$info['CodePostal'].'</td>';
+					          echo'<td>'.$info['Ville'].'</td>';
+					          echo'<td>'.$info['Adresse'].'</td>';
+					          echo'<td>'.$info['Mail'].'</td>';
+					          echo'<td>'.$info['NbAchatsFidelisant'].'</td>';		  
 									echo'</tr>';	
 								}
 							?>
 						</tbody>			
 					</table>
+					</div>
 				</div>	
+				</br>
+				<div class="col-lg-12">
+					<h1 class="page-header" style="text-align: center;">Réservation effectué</h1>
+				
+        <table class="table" style="text-align: center;">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">Numéro de reservation</th>
+		            <th scope="col">Montant payé</th>
+								<th scope="col">Date</th>
+								<th scope="col">Heure</th>
+								<th scope="col">Numéro de traversée</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+								$getTableau = $db->prepare("SELECT * FROM reservation WHERE idClient='".$_SESSION['idClient']."' ");
+								$getTableau->setFetchMode(PDO:: FETCH_ASSOC);
+								$getTableau->execute();
+								while ($info=$getTableau->fetch()) {
+								  echo'<tr>';
+										echo'<th scope="row">'.$info['NumReservation'].'</th>';		  		  
+										echo'<td>'.$info['MontantARegler'].'€</td>';		  
+					          echo'<td>'.$info['date'].'</td>';
+					          echo'<td>'.$info['Heure'].'</td>';
+					          echo'<td>'.$info['numeroIdentifiant'].'</td>';	  
+									echo'</tr>';	
+								}
+							?>
+						</tbody>			
+					</table>
+					</div>
 			</div>
 		</div>
 	</div>

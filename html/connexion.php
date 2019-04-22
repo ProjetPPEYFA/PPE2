@@ -1,5 +1,6 @@
 <?php
-			include 'connect.php';
+			require 'connect.php';
+
 			$username=$_POST['username'];
 			$pass=$_POST['password'];
 

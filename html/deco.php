@@ -2,5 +2,5 @@
 include'start.php';
 session_start();
 session_destroy();
-header("Location: index.hmtl");
+header("Location: index.html");
 ?>
