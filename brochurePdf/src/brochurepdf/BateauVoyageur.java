@@ -54,11 +54,6 @@ public class BateauVoyageur extends Bateau {
         this.setImageBatVoy(uneImage);
     }
     
-    public BateauVoyageur(int unId, String unNom, double uneLongueur, double uneLargeur, double uneVitesse){
-        super(unId, unNom, uneLongueur, uneLargeur);
-        this.setVitesseBatVoy(uneVitesse);
-    }
-    
     public String listeEquipements(){
         String liste = "";
         for (Equipement unEquip : this.lesEquipements){
