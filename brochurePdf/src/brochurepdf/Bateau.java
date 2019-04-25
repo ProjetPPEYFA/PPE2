@@ -11,13 +11,13 @@ package brochurepdf;
  */
 public class Bateau {
     
-    private int idBateau;
+    private String idBateau;
     private String nomBateau;
     private double longueurBateau;
     private double largeurBateau;
 
 
-    public void setIdBateau(int idB) {
+    public void setIdBateau(String idB) {
         this.idBateau = idB;
     }
 
@@ -33,7 +33,7 @@ public class Bateau {
         this.largeurBateau = largeurB;
     }
 
-    public int getIdBateau() {
+    public String getIdBateau() {
         return idBateau;
     }
 
@@ -50,11 +50,12 @@ public class Bateau {
     }
     
     
-    public Bateau (int idB, String nomB, double longueurB, double largeurB) {
-        this.idBateau = idB;
-        this.nomBateau = nomB;
-        this.largeurBateau = largeurB;
-        this.longueurBateau = longueurB;
+    
+    public Bateau (String idB, String nomB, double longueurB, double largeurB) {
+        this.setIdBateau(idB);
+        this.setNomBateau(nomB);
+        this.setLongueurBateau(longueurB);
+        this.setLargeurBateau(largeurB);
     }
     
     

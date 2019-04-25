@@ -2,5 +2,5 @@
 include'start.php';
 start();
 session_destroy();
-header("Location: ../index.html");
+header("Location: http://10.3.14.167");
 ?>

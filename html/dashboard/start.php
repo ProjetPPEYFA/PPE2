@@ -3,7 +3,7 @@ function start()
 {
   session_start(); 
 
-  $db=new PDO('mysql:host=localhost; dbname=mariateam','root','');
+  $db=new PDO('mysql:host=localhost; dbname=MariaTeam','root','root');
 
   $check=false;
 

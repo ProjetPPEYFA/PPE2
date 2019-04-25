@@ -187,6 +187,9 @@ start();
 
               $arrivee=$_POST['arrivee'];
 
+              var_dump($_POST);
+              exit;
+
 
               $getCodeDepart = $db->prepare('SELECT codePort From Ports where nomPort=? ');
               $getCodeDepart->execute([$depart]);
@@ -260,14 +263,20 @@ start();
     							echo'<th scope="row">'.$info['numeroIdentifiant'].'</th>';		  
     							echo'<td>'.$info['heureDeDepart'].'</td>';		  
     							echo'<td>'.$info['date'].'</td>';		  
-    		          echo'<td>'.$info['NomBateau'].'</td>';	
-    		          echo'<td>'.$info['PassagerRestant'].'</td>';
-    		          echo'<td>'.$info['VehInf2mRestant'].'</td>';
-    		          echo'<td>'.$info['VehSup2mRestant'].'</td>';
+    		                	echo'<td>'.$info['NomBateau'].'</td>';	
+    		                	echo'<td>'.$info['PassagerRestant'].'</td>';
+    		                	echo'<td>'.$info['VehInf2mRestant'].'</td>';
+    		                	echo'<td>'.$info['VehSup2mRestant'].'</td>';
+
     							echo'<td><div class="radio"><label><input type="radio" value="'.$info['numeroIdentifiant'].'" name="optradio" id="optradio" checked></label></div></td>';		  
   						  echo'</tr>';	
 
 						  	}
+
+						  	if($test == Null && $Liaison != Null )
+						  		{
+						  			echo'<h1 style="color:#FF0000;">AUCUNE TRAVERSEE DISPONIBLE</h1>';
+						  		}
 
 
 
@@ -334,33 +343,20 @@ start();
 
           if(isset($_GET['reserver']))
            {
-             $radio= $_POST['optradio'];
-             $enfant = 0;
-             $adulte = 0;
-             $junior = 0;
-             $vhInf4 = 0;
-             $vhInf5 = 0;
-             $fourgon = 0;
-             $campingcar = 0;
-             $camion = 0;
-             $voiture = 0;
 
+           	if(!isset($_POST['optradio'])){$radio = 0;}else{$radio= $_POST['optradio'];}
+           	if(!isset($_POST['nbAdulte'])){$adulte = 0;}else{$adulte= $_POST['nbAdulte'];}
+           	if(!isset($_POST['nbJunior'])){$junior = 0;}else{$junior= $_POST['nbJunior'];}
+           	if(!isset($_POST['nbEnfant'])){$enfant = 0;}else{$enfant= $_POST['nbEnfant'];}
 
-             if($_POST['nbEnfant']!=null){$enfant = $_POST['nbEnfant'];}
-             if($_POST['nbJunior']!=null){$junior = $_POST['nbJunior'];}
-             if($_POST['nbAdulte']!=null){$adulte = $_POST['nbAdulte'];}
+           	if($_POST['vhInf4']==Null){$vhInf4 = 0;}else{$vhInf4= $_POST['vhInf4'];}
 
-             if($_POST['vhInf4']!=null){$vhInf4 = $_POST['vhInf4'];}
-             if($_POST['vhInf5']!=null){$vhInf5 = $_POST['vhInf5'];}
-             if($_POST['fourgon']!=null){$fourgon = $_POST['fourgon'];}
-             if($_POST['campingcar']!=null){$campingcar = $_POST['campingcar'];}
-             if($_POST['camion']!=null){$camion = $_POST['camion'];}
+           	if(!isset($_POST['vhInf5'])){$vhInf5 = 0;}else{$vhInf5= $_POST['vhInf5'];}
+           	if(!isset($_POST['fourgon'])){$fourgon = 0;}else{$fourgon= $_POST['fourgon'];}
+           	if(!isset($_POST['campingcar'])){$campingcar = 0;}else{$campingcar= $_POST['campingcar'];}
+           	if(!isset($_POST['camion'])){$camion = 0;}else{$camion= $_POST['camion'];}
 
-             if($vhInf4 !=0 || $vhInf5!=0 || $fourgon !=0 || $camion !=0)
-             {
-                $voiture = $vhInf4+$vhInf5+$fourgon+$campingcar+$camion;
-             }
-            
+            $voiture = $vhInf4+$vhInf5+$fourgon+$campingcar+$camion;
 
             $getL = $db->prepare("SELECT P.idLiaison FROM traversee T, Periode P,Liaison L WHERE T.idPeriode = P.idPeriode AND T.numeroIdentifiant=?");
             $getL->execute([$radio]);
@@ -470,9 +466,10 @@ start();
            		  $getDateResa = $db->query("SELECT date FROM traversee WHERE numeroIdentifiant = ".$radio."");
                   $row = $getDateResa->fetch(); 
                   $dateResa = $row['date'];
-                  ?>
 
-                  
+                 
+
+                  ?>
 
                   <li class="list-group-item d-flex justify-content-between">
                     <span>Total (EUR)</span>
@@ -504,9 +501,12 @@ start();
 						             $totalPassager = $PlacesA1+$PlacesA2+$PlacesA3;
 
 						             $sql=$db->prepare("INSERT INTO Reservation (MontantARegler,date,Heure,numeroIdentifiant,idClient,PlacesA1,PlacesA2,PlacesA3,PlacesB1,PlacesB2,PlacesC1,PlacesC2,PlacesC3) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-						             $sql->execute([$MontantARegler, $dateReservation,$heure, $NumeroIdentifiant, $idClient,$PlacesA1,$PlacesA2,$PlacesA3,$PlacesB1,$PlacesB2,$PlacesC1,$PlacesC2,$PlacesC3]);
+						            $sql->execute([$MontantARegler, $dateReservation,$heure, $NumeroIdentifiant, $idClient,$PlacesA1,$PlacesA2,$PlacesA3,$PlacesB1,$PlacesB2,$PlacesC1,$PlacesC2,$PlacesC3]);
+
 			
-                        //$update=$db->query('UPDATE traversee SET PassagerRestant=PassagerRestant-'.$totalPassager.',VehInf2mRestant=VehInf2mRestant-'.$vhInf4.',VehSup2mRestant=VehSup2mRestant-'.$nbSup2M.' WHERE numeroIdentifiant='.$radio.'');
+                                    $update=$db->query('UPDATE traversee SET PassagerRestant=PassagerRestant-'.$totalPassager.',VehInf2mRestant=VehInf2mRestant-'.$vhInf4.',VehSup2mRestant=VehSup2mRestant-'.$nbSup2M.' WHERE numeroIdentifiant='.$radio.'');
+
+					
 
 						            echo'<h3 style="color:red;">Enregistrement reussi</h3>';
 
