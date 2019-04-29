@@ -8,6 +8,7 @@ package brochurepdf;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -38,10 +39,32 @@ public class DBConnect {
             }
             
         }catch(Exception ex){
-            JOptionPane.showMessageDialog(null,"Probleme de lecteur de la table bateau : "+ ex);
+            JOptionPane.showMessageDialog(null,"Probleme de lecture de la table bateau : "+ ex);
         }
         
         return lesBateaux;
+        
+    }
+    
+    public ArrayList<Equipement> equipementList(int id){
+        ArrayList<Equipement> lesEquipements = new ArrayList();
+        try{
+            
+            String query = "SELECT * FROM bateauequipe WHERE idBateau = "+id+"";
+            rs = st.executeQuery(query);
+            Equipement unEquipement;
+            while(rs.next())
+            {     
+                unEquipement = new Equipement(rs.getInt("id"),getNomEquipement(rs.getInt("idEquipement"))); 
+                lesEquipements.add(unEquipement);
+            }
+            
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"Probleme de lecture de la table equipement : "+ ex);
+        }
+        
+        return lesEquipements;
+        
         
     }
     
@@ -59,22 +82,25 @@ public class DBConnect {
     
     
     
-    public void getEquipement(int idBateau){
-        try{
-            
-            String query = "SELECT * FROM bateauequipe WHERE idBateau ="+idBateau+"";
-            rs = st.executeQuery(query);
-            System.out.println("Records from Database / equipement");
-            while(rs.next())
-            {
-                String id=rs.getString("idEquipement");
-                System.out.println("id de l'equipement : "+id);
+    public String getNomEquipement(int id){
+            String nom = null;
+            try{
+                String query = "SELECT Libelle FROM equipementbateau WHERE id ="+id+"";
+                rs = st.executeQuery(query);
+                
+                while(rs.next())
+                {
+                    nom =rs.getString("Libelle"); 
+                }
             }
             
-        }catch(Exception ex){
-            System.out.println(ex);
-        }
+            catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"Probleme de connexion à la bdd erreur : "+ex);
+            } 
+            
+            return nom; 
     }
+    
     
     public void InsertBateau(String Nom,Double Largeur,Double Longeur,Double Vitesse,String path){     
         try{
