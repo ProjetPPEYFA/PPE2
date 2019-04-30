@@ -37,7 +37,6 @@ public class DBConnect {
                 bateau = new BateauVoyageur(rs.getInt("idBateau"),rs.getString("NomBateau"),rs.getDouble("LongueurEnMetre"),rs.getDouble("LargeurEnMetre"),rs.getDouble("VitesseMaxEnNoeud"),rs.getString("PathImage"));
                 lesBateaux.add(bateau);
             }
-            
         }catch(Exception ex){
             JOptionPane.showMessageDialog(null,"Probleme de lecture de la table bateau : "+ ex);
         }
@@ -49,16 +48,16 @@ public class DBConnect {
     public ArrayList<Equipement> equipementList(int id){
         ArrayList<Equipement> lesEquipements = new ArrayList();
         try{
-            
-            String query = "SELECT * FROM bateauequipe WHERE idBateau = "+id+"";
+            String query = "select Libelle,equipementbateau.id FROM equipementbateau,bateauequipe WHERE equipementbateau.id = bateauequipe.idEquipement AND bateauequipe.idBateau="+id+"  ORDER BY `equipementbateau`.`id` ASC";
             rs = st.executeQuery(query);
+            System.out.println("Records from Database / equipement");
             Equipement unEquipement;
-            while(rs.next())
-            {     
-                unEquipement = new Equipement(rs.getInt("id"),getNomEquipement(rs.getInt("idEquipement"))); 
-                lesEquipements.add(unEquipement);
-            }
             
+            while(rs.next())
+            {   
+                unEquipement = new Equipement(rs.getInt("id"),rs.getString("Libelle")); 
+                lesEquipements.add(unEquipement);       
+            }
         }catch(Exception ex){
             JOptionPane.showMessageDialog(null,"Probleme de lecture de la table equipement : "+ ex);
         }
@@ -82,8 +81,8 @@ public class DBConnect {
     
     
     
-    public String getNomEquipement(int id){
-            String nom = null;
+    /*public String getNomEquipement(int id){
+            String nom = "";
             try{
                 String query = "SELECT Libelle FROM equipementbateau WHERE id ="+id+"";
                 rs = st.executeQuery(query);
@@ -92,6 +91,8 @@ public class DBConnect {
                 {
                     nom =rs.getString("Libelle"); 
                 }
+                rs.close();
+                st.close();
             }
             
             catch(Exception ex){
@@ -99,7 +100,7 @@ public class DBConnect {
             } 
             
             return nom; 
-    }
+    }*/
     
     
     public void InsertBateau(String Nom,Double Largeur,Double Longeur,Double Vitesse,String path){     
