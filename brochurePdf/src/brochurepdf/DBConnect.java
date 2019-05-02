@@ -45,6 +45,8 @@ public class DBConnect {
         
     }
     
+    
+    
     public ArrayList<Equipement> equipementList(int id){
         ArrayList<Equipement> lesEquipements = new ArrayList();
         try{
@@ -67,6 +69,40 @@ public class DBConnect {
         
     }
     
+    public ArrayList equipementList(){
+        ArrayList<String> lesEquipements = new ArrayList();
+        try{
+            String query = "SELECT * FROM equipementbateau";
+            rs = st.executeQuery(query);
+            
+            while(rs.next())
+            {   
+                lesEquipements.add(""+rs.getInt("id")+" - "+rs.getString("Libelle")+"");       
+            }
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"Probleme de lecture de la table equipement : "+ ex);
+        }
+        
+        return lesEquipements;
+    }
+    
+    public ArrayList bateauListString(){
+        ArrayList<String> lesBateaux = new ArrayList();
+        try{
+            String query = "SELECT * FROM bateau";
+            rs = st.executeQuery(query);
+            
+            while(rs.next())
+            {   
+                lesBateaux.add(""+rs.getInt("idBateau")+" - "+rs.getString("NomBateau")+"");     
+            }
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"Probleme de lecture de la table bateau : "+ ex);
+        }
+        
+        return lesBateaux;
+    }
+    
     public DBConnect(){
         try{ 
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -79,33 +115,22 @@ public class DBConnect {
         }   
     }
     
-    
-    
-    /*public String getNomEquipement(int id){
-            String nom = "";
-            try{
-                String query = "SELECT Libelle FROM equipementbateau WHERE id ="+id+"";
-                rs = st.executeQuery(query);
-                
-                while(rs.next())
-                {
-                    nom =rs.getString("Libelle"); 
-                }
-                rs.close();
-                st.close();
-            }
-            
-            catch(Exception ex){
-            JOptionPane.showMessageDialog(null,"Probleme de connexion à la bdd erreur : "+ex);
-            } 
-            
-            return nom; 
-    }*/
+   
     
     
     public void InsertBateau(String Nom,Double Largeur,Double Longeur,Double Vitesse,String path){     
         try{
             String query = "INSERT INTO bateau (nomBateau,vitesseMaxEnNoeud,LongueurEnMetre,LargeurEnMetre,PathImage) VALUES ('"+Nom+"', "+Largeur+","+Longeur+","+Vitesse+",'"+path+"'); ";
+            st.executeUpdate(query);
+            System.out.println("Insert into Database"); 
+        }catch(Exception ex){
+            System.out.println(ex);
+        }  
+    }
+    
+    public void InsertEquipement(int idBateau ,int idEquip){     
+        try{
+            String query = "INSERT INTO bateauequipe (idBateau,idEquipement) VALUES ("+idBateau+","+idEquip+"); ";
             st.executeUpdate(query);
             System.out.println("Insert into Database"); 
         }catch(Exception ex){
@@ -132,5 +157,21 @@ public class DBConnect {
             System.out.println(ex);
         }  
     }
+    
+    public void DeleteEquipement(String nomBateau,int idEquipement){
+        try{
+            String query = "DELETE FROM `bateauequipe` WHERE idEquipement = "+idEquipement+" and idBateau =(SELECT idBateau FROM Bateau WHERE NomBateau = '"+nomBateau+"')";
+            st.executeUpdate(query);
+            System.out.println("Delete From Database"); 
+        }catch(Exception ex){
+            System.out.println(ex);
+        }  
+    }
+
+    void InsertEquipement(char idEquip, char idBateau) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
     
 }

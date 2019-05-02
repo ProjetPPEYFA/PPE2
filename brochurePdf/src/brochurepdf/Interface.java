@@ -5,8 +5,13 @@
  */
 package brochurepdf;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+
 
 /**
  *
@@ -46,10 +51,35 @@ public class Interface extends javax.swing.JFrame {
         }   
     }
     
+    public void initCombobox(){
+        DBConnect con = new DBConnect();
+        ArrayList<String>listEquip = con.equipementList();
+        ArrayList<String>listBateaux = con.bateauListString();
+        for(int i=0;i<listEquip.size();i++)
+        {
+            String item = listEquip.get(i);
+            jComboBoxEquipement.addItem(item);
+         
+        }   
+        
+        for(int i=0;i<listBateaux.size();i++)
+        {
+            String item2 = listBateaux.get(i);
+            jComboBoxBateau.addItem(item2);
+         
+        }   
+        
+        
+
+    }
+    
     public Interface() {
         initComponents();
         reloadBateau();
+        initCombobox();
     }
+    
+    
     
     
 
@@ -79,6 +109,10 @@ public class Interface extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jButtonPdf = new javax.swing.JButton();
+        jComboBoxBateau = new javax.swing.JComboBox<>();
+        jComboBoxEquipement = new javax.swing.JComboBox<>();
+        jButtonValider = new javax.swing.JButton();
+        jButtonSupprimer = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -149,6 +183,11 @@ public class Interface extends javax.swing.JFrame {
                 "id", "Nom"
             }
         ));
+        jTableEquipement.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableEquipementMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableEquipement);
 
         jLabel2.setText("équipements");
@@ -160,6 +199,26 @@ public class Interface extends javax.swing.JFrame {
         jButtonPdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonPdfActionPerformed(evt);
+            }
+        });
+
+        jComboBoxBateau.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxBateauActionPerformed(evt);
+            }
+        });
+
+        jButtonValider.setText("Ajouter");
+        jButtonValider.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonValiderActionPerformed(evt);
+            }
+        });
+
+        jButtonSupprimer.setText("Supprimer");
+        jButtonSupprimer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSupprimerActionPerformed(evt);
             }
         });
 
@@ -186,8 +245,14 @@ public class Interface extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jButtonDelete))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(95, 95, 95)
-                        .addComponent(jButtonPdf)))
+                        .addGap(59, 59, 59)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jComboBoxEquipement, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBoxBateau, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButtonValider)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButtonSupprimer)))))
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
@@ -201,6 +266,10 @@ public class Interface extends javax.swing.JFrame {
                                 .addComponent(jButtonReload)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(445, 445, 445)
+                .addComponent(jButtonPdf)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,17 +300,22 @@ public class Interface extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel2)
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jComboBoxBateau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(62, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonPdf)
-                        .addGap(97, 97, 97))))
+                        .addComponent(jComboBoxEquipement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonValider)
+                            .addComponent(jButtonSupprimer))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                .addComponent(jButtonPdf)
+                .addGap(53, 53, 53))
         );
 
         pack();
@@ -335,6 +409,49 @@ public class Interface extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonPdfActionPerformed
 
+    private void jComboBoxBateauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxBateauActionPerformed
+        
+    }//GEN-LAST:event_jComboBoxBateauActionPerformed
+
+    private void jButtonValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValiderActionPerformed
+        String bateau = jComboBoxBateau.getSelectedItem().toString();
+        char iBateau = bateau.charAt(0);
+        int idBateau = Character.getNumericValue(iBateau); 
+        
+        String equip = jComboBoxEquipement.getSelectedItem().toString();
+        char iEquip = equip.charAt(0);
+        int idEquip = Character.getNumericValue(iEquip); 
+        
+        
+        
+        
+        
+        System.out.println(""+idBateau+""+idEquip);
+        
+        DBConnect con = new DBConnect();
+        con.InsertEquipement(idBateau, idEquip);
+        
+        
+    }//GEN-LAST:event_jButtonValiderActionPerformed
+
+    private void jButtonSupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSupprimerActionPerformed
+        DBConnect con = new DBConnect();
+        int ligne = jTableEquipement.getSelectedRow();
+        String id = jTableEquipement.getModel().getValueAt(ligne, 0).toString();
+        int intId = Integer.parseInt(id);
+        
+        String nomBateau = jTextFieldNom.getText();
+        
+        con.DeleteEquipement(nomBateau, intId);
+        
+        
+    
+    }//GEN-LAST:event_jButtonSupprimerActionPerformed
+
+    private void jTableEquipementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableEquipementMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTableEquipementMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -376,6 +493,10 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JButton jButtonModifier;
     private javax.swing.JButton jButtonPdf;
     private javax.swing.JButton jButtonReload;
+    private javax.swing.JButton jButtonSupprimer;
+    private javax.swing.JButton jButtonValider;
+    private javax.swing.JComboBox<String> jComboBoxBateau;
+    private javax.swing.JComboBox<String> jComboBoxEquipement;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
