@@ -11,8 +11,8 @@ package brochurepdf;
  */
 public class Equipement {
     
-    private String idEquip = new String();
-    private String libEquip = new String();
+    private int idEquip;
+    private String libEquip;
     
 
     public void setIdEquip(String unId) {
@@ -23,16 +23,17 @@ public class Equipement {
         this.libEquip = libEquip;
     }
 
-    public String getIdEquip() {
+    public int getIdEquip() {
         return idEquip;
     }
 
     public String getLibEquip() {
         return libEquip;
+        
     }
     
     
-    public Equipement(String unId, String unLib){
+    public Equipement(int unId, String unLib){
         
         this.idEquip = unId;
         this.libEquip = unLib;

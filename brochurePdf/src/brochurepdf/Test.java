@@ -39,9 +39,9 @@ public class Test {
         
         System.out.println(bateau1.versChaine());*/
         
-        /* DBConnect con = new DBConnect();
-        con.getBateau();
-        con.getEquipement(1); */
+         DBConnect con = new DBConnect();
+         con.equipementList(1);
+         
     }
     
 }

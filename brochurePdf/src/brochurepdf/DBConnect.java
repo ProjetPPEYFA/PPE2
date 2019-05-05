@@ -8,6 +8,7 @@ package brochurepdf;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -36,13 +37,70 @@ public class DBConnect {
                 bateau = new BateauVoyageur(rs.getInt("idBateau"),rs.getString("NomBateau"),rs.getDouble("LongueurEnMetre"),rs.getDouble("LargeurEnMetre"),rs.getDouble("VitesseMaxEnNoeud"),rs.getString("PathImage"));
                 lesBateaux.add(bateau);
             }
-            
         }catch(Exception ex){
-            JOptionPane.showMessageDialog(null,"Probleme de lecteur de la table bateau : "+ ex);
+            JOptionPane.showMessageDialog(null,"Probleme de lecture de la table bateau : "+ ex);
         }
         
         return lesBateaux;
         
+    }
+    
+    
+    
+    public ArrayList<Equipement> equipementList(int id){
+        ArrayList<Equipement> lesEquipements = new ArrayList();
+        try{
+            String query = "select Libelle,equipementbateau.id FROM equipementbateau,bateauequipe WHERE equipementbateau.id = bateauequipe.idEquipement AND bateauequipe.idBateau="+id+"  ORDER BY `equipementbateau`.`id` ASC";
+            rs = st.executeQuery(query);
+            System.out.println("Records from Database / equipement");
+            Equipement unEquipement;
+            
+            while(rs.next())
+            {   
+                unEquipement = new Equipement(rs.getInt("id"),rs.getString("Libelle")); 
+                lesEquipements.add(unEquipement);       
+            }
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"Probleme de lecture de la table equipement : "+ ex);
+        }
+        
+        return lesEquipements;
+        
+        
+    }
+    
+    public ArrayList equipementList(){
+        ArrayList<String> lesEquipements = new ArrayList();
+        try{
+            String query = "SELECT * FROM equipementbateau";
+            rs = st.executeQuery(query);
+            
+            while(rs.next())
+            {   
+                lesEquipements.add(""+rs.getInt("id")+" - "+rs.getString("Libelle")+"");       
+            }
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"Probleme de lecture de la table equipement : "+ ex);
+        }
+        
+        return lesEquipements;
+    }
+    
+    public ArrayList bateauListString(){
+        ArrayList<String> lesBateaux = new ArrayList();
+        try{
+            String query = "SELECT * FROM bateau";
+            rs = st.executeQuery(query);
+            
+            while(rs.next())
+            {   
+                lesBateaux.add(""+rs.getInt("idBateau")+" - "+rs.getString("NomBateau")+"");     
+            }
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"Probleme de lecture de la table bateau : "+ ex);
+        }
+        
+        return lesBateaux;
     }
     
     public DBConnect(){
@@ -57,28 +115,22 @@ public class DBConnect {
         }   
     }
     
+   
     
-    
-    public void getEquipement(int idBateau){
-        try{
-            
-            String query = "SELECT * FROM bateauequipe WHERE idBateau ="+idBateau+"";
-            rs = st.executeQuery(query);
-            System.out.println("Records from Database / equipement");
-            while(rs.next())
-            {
-                String id=rs.getString("idEquipement");
-                System.out.println("id de l'equipement : "+id);
-            }
-            
-        }catch(Exception ex){
-            System.out.println(ex);
-        }
-    }
     
     public void InsertBateau(String Nom,Double Largeur,Double Longeur,Double Vitesse,String path){     
         try{
             String query = "INSERT INTO bateau (nomBateau,vitesseMaxEnNoeud,LongueurEnMetre,LargeurEnMetre,PathImage) VALUES ('"+Nom+"', "+Largeur+","+Longeur+","+Vitesse+",'"+path+"'); ";
+            st.executeUpdate(query);
+            System.out.println("Insert into Database"); 
+        }catch(Exception ex){
+            System.out.println(ex);
+        }  
+    }
+    
+    public void InsertEquipement(int idBateau ,int idEquip){     
+        try{
+            String query = "INSERT INTO bateauequipe (idBateau,idEquipement) VALUES ("+idBateau+","+idEquip+"); ";
             st.executeUpdate(query);
             System.out.println("Insert into Database"); 
         }catch(Exception ex){
@@ -105,5 +157,21 @@ public class DBConnect {
             System.out.println(ex);
         }  
     }
+    
+    public void DeleteEquipement(String nomBateau,int idEquipement){
+        try{
+            String query = "DELETE FROM `bateauequipe` WHERE idEquipement = "+idEquipement+" and idBateau =(SELECT idBateau FROM Bateau WHERE NomBateau = '"+nomBateau+"')";
+            st.executeUpdate(query);
+            System.out.println("Delete From Database"); 
+        }catch(Exception ex){
+            System.out.println(ex);
+        }  
+    }
+
+    void InsertEquipement(char idEquip, char idBateau) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
     
 }
