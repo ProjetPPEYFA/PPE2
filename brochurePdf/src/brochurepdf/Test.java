@@ -38,11 +38,11 @@ public class Test {
         Desktop.getDesktop().open(new File("C:\\Users\\mahammed.yazid\\Desktop\\test.pdf"));
         
         
-        System.out.println(bateau1.versChaine());*/
+        System.out.println(bateau1.versChaine());
         
         PDF unPdf = new PDF("test.pdf");
         unPdf.ecrirePDF("jecris dans le fichier");
-        unPdf.Fermer();
+        unPdf.Fermer();*/
         
          
     }

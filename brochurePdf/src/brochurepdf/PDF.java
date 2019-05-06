@@ -25,13 +25,14 @@ import java.net.URISyntaxException;
  * @author WESHALORS
  */
 public class PDF {
-    private  String FILE = "C:\\wamp64\\www\\PPE2\\brochurePdf\\";
+    private  String FILE;
     private String name;
     Document unDoc;
     
-    public PDF(String nom){    
+    public PDF(String nom,String File){    
          try {
             this.name = nom;
+            this.FILE = File;
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(this.FILE+nom));
             this.unDoc = document;

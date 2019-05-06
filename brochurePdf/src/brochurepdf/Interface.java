@@ -415,7 +415,7 @@ public class Interface extends javax.swing.JFrame {
     private void jButtonPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPdfActionPerformed
        DBConnect con = new DBConnect();
        ArrayList<BateauVoyageur>list = con.bateauList();
-       PDF unPdf = new PDF("les_bateaux.pdf");
+       PDF unPdf = new PDF("les_bateaux.pdf","C:\\wamp64\\www\\PPE2\\brochurePdf\\");
        unPdf.Ouvrir();
        
         for(int i=0;i<list.size();i++)
