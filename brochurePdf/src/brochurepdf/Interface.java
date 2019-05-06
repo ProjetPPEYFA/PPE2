@@ -35,6 +35,7 @@ public class Interface extends javax.swing.JFrame {
          row[5]=list.get(i).getImageBatVoy();
          model.addRow(row); 
         }   
+        
     }
     
     public void reloadEquipement(int id){
@@ -48,7 +49,9 @@ public class Interface extends javax.swing.JFrame {
          row[0]=list.get(i).getIdEquip();
          row[1]=list.get(i).getLibEquip();
          model.addRow(row); 
-        }   
+        } 
+        
+        
     }
     
     public void initCombobox(){
@@ -406,7 +409,14 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_jTableBateauMouseClicked
 
     private void jButtonPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPdfActionPerformed
-        // TODO add your handling code here:
+       DBConnect con = new DBConnect();
+       ArrayList<BateauVoyageur>list = con.bateauList();
+       
+        for(int i=0;i<list.size();i++)
+        {
+         con.equipementList(list.get(i).getIdBateau());
+         System.out.println(list.get(i).versChaine());
+        }
     }//GEN-LAST:event_jButtonPdfActionPerformed
 
     private void jComboBoxBateauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxBateauActionPerformed
