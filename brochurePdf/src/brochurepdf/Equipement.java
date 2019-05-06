@@ -15,12 +15,12 @@ public class Equipement {
     private String libEquip;
     
 
-    public void setIdEquip(String unId) {
-        this.idEquip = idEquip;
+    public void setIdEquip(int unId) {
+        this.idEquip = unId;
     }
 
     public void setLibEquip(String unLib) {
-        this.libEquip = libEquip;
+        this.libEquip = unLib;
     }
 
     public int getIdEquip() {
@@ -40,8 +40,8 @@ public class Equipement {
         
     }
     
-    public String versChaine(){
+    public void versChaine(){
         
-        return ("Libellé équipement" + this.getLibEquip());
+        System.out.println("Libellé équipement" + getLibEquip());
     }
 }

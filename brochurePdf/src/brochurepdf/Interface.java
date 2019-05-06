@@ -5,11 +5,15 @@
  */
 package brochurepdf;
 
+import com.itextpdf.text.DocumentException;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -411,12 +415,43 @@ public class Interface extends javax.swing.JFrame {
     private void jButtonPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPdfActionPerformed
        DBConnect con = new DBConnect();
        ArrayList<BateauVoyageur>list = con.bateauList();
+       PDF unPdf = new PDF("les_bateaux.pdf");
+       unPdf.Ouvrir();
        
         for(int i=0;i<list.size();i++)
         {
-         con.equipementList(list.get(i).getIdBateau());
-         System.out.println(list.get(i).versChaine());
+         
+         ArrayList<Equipement>listEquip = con.equipementList(list.get(i).getIdBateau());
+         
+         for(int j=0;j<listEquip.size();j++)
+         {
+            int idEquipement = listEquip.get(j).getIdEquip();
+            String Libelle = listEquip.get(j).getLibEquip();
+
+            Equipement nouvel_equip = new Equipement(idEquipement,Libelle);   
+            
+            list.get(i).ajouterEquipement(nouvel_equip);
+         }
+         
+         String Contenu = list.get(i).versChaine();
+         
+         System.out.println(Contenu);
+         
+           try {
+               unPdf.ecrirePDF(Contenu);
+           } 
+           catch (FileNotFoundException ex) {
+               Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+           } 
+           catch (DocumentException ex) {
+               Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+           }
+           
+           
+         
         }
+        unPdf.Fermer();
+        System.out.println("PDF SUCCESS");
     }//GEN-LAST:event_jButtonPdfActionPerformed
 
     private void jComboBoxBateauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxBateauActionPerformed
