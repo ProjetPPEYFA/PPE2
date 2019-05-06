@@ -158,9 +158,9 @@ public class DBConnect {
         }  
     }
     
-    public void DeleteEquipement(String nomBateau,int idEquipement){
+    public void DeleteEquipement(int idBateau,int idEquipement){
         try{
-            String query = "DELETE FROM `bateauequipe` WHERE idEquipement = "+idEquipement+" and idBateau =(SELECT idBateau FROM Bateau WHERE NomBateau = '"+nomBateau+"')";
+            String query = "DELETE FROM `bateauequipe` WHERE idEquipement = "+idEquipement+" and idBateau ="+idBateau+"";
             st.executeUpdate(query);
             System.out.println("Delete From Database"); 
         }catch(Exception ex){

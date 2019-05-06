@@ -7,6 +7,8 @@ package brochurepdf;
 
 import com.itextpdf.text.DocumentException;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -330,6 +332,9 @@ public class Interface extends javax.swing.JFrame {
 
     private void jButtonReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonReloadActionPerformed
         reloadBateau();
+        DefaultTableModel model = (DefaultTableModel)jTableEquipement.getModel();
+        Object[] row = new Object[2];
+        model.setRowCount(0);
     }//GEN-LAST:event_jButtonReloadActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
@@ -415,11 +420,21 @@ public class Interface extends javax.swing.JFrame {
     private void jButtonPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPdfActionPerformed
        DBConnect con = new DBConnect();
        ArrayList<BateauVoyageur>list = con.bateauList();
-       PDF unPdf = new PDF("les_bateaux.pdf","C:\\wamp64\\www\\PPE2\\brochurePdf\\");
+       PDF unPdf = new PDF("les_bateaux.pdf","C:\\Users\\floki\\OneDrive\\Documents\\GitHub\\PPE2\\brochurePdf\\");
        unPdf.Ouvrir();
        
         for(int i=0;i<list.size();i++)
         {
+            System.out.println("C:\\Users\\floki\\OneDrive\\Documents\\GitHub\\PPE2\\brochurePdf\\imgBateau\\"+list.get(i).getImageBatVoy()+"");
+           try {
+               unPdf.ChargerImage("C:\\Users\\floki\\OneDrive\\Documents\\GitHub\\PPE2\\brochurePdf\\imgBateau\\"+list.get(i).getImageBatVoy()+"");
+           } catch (URISyntaxException ex) {
+               Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (IOException ex) {
+               Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (DocumentException ex) {
+               Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+           }
          
          ArrayList<Equipement>listEquip = con.equipementList(list.get(i).getIdBateau());
          
@@ -461,33 +476,35 @@ public class Interface extends javax.swing.JFrame {
     private void jButtonValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValiderActionPerformed
         String bateau = jComboBoxBateau.getSelectedItem().toString();
         char iBateau = bateau.charAt(0);
-        int idBateau = Character.getNumericValue(iBateau); 
+        int idBateau = Character.getNumericValue(iBateau);
         
         String equip = jComboBoxEquipement.getSelectedItem().toString();
         char iEquip = equip.charAt(0);
         int idEquip = Character.getNumericValue(iEquip); 
         
         
-        
-        
-        
-        System.out.println(""+idBateau+""+idEquip);
-        
         DBConnect con = new DBConnect();
         con.InsertEquipement(idBateau, idEquip);
+               
+        reloadEquipement(idBateau);
         
         
     }//GEN-LAST:event_jButtonValiderActionPerformed
 
     private void jButtonSupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSupprimerActionPerformed
         DBConnect con = new DBConnect();
-        int ligne = jTableEquipement.getSelectedRow();
-        String id = jTableEquipement.getModel().getValueAt(ligne, 0).toString();
-        int intId = Integer.parseInt(id);
         
-        String nomBateau = jTextFieldNom.getText();
+        String bateau = jComboBoxBateau.getSelectedItem().toString();
+        char iBateau = bateau.charAt(0);
+        int idBateau = Character.getNumericValue(iBateau);
         
-        con.DeleteEquipement(nomBateau, intId);
+        String equip = jComboBoxEquipement.getSelectedItem().toString();
+        char iEquip = equip.charAt(0);
+        int idEquip = Character.getNumericValue(iEquip);
+        
+        con.DeleteEquipement(idBateau, idEquip);
+        
+        reloadEquipement(idBateau);
         
         
     

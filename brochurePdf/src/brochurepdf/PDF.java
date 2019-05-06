@@ -50,8 +50,9 @@ public class PDF {
     
     public void ChargerImage(String ImageLink) throws URISyntaxException, BadElementException, IOException, DocumentException{
         
-         PdfWriter.getInstance(this.unDoc, new FileOutputStream(this.FILE+this.name));
+         //PdfWriter.getInstance(this.unDoc, new FileOutputStream(this.FILE+this.name));
          Image img = Image.getInstance(ImageLink);
+         img.setWidthPercentage(0);
          this.unDoc.add(img);
     }
     public void Fermer(){
