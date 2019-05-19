@@ -64,7 +64,7 @@ public class BateauVoyageur extends Bateau {
     
     @Override
     public String versChaine(){
-        return ( super.versChaine() + "\n Vitesse Bateau: "+ this.getVitesseBatVoy() +"\n Liste des équipements: \n"+this.listeEquipements());
+        return ( super.versChaine() + "\n Vitesse Bateau: "+ this.getVitesseBatVoy() +"\n Liste des équipements: \n"+this.listeEquipements()+"\n\n");
     }
     
 }

@@ -60,7 +60,7 @@ public class Bateau {
     
     public String versChaine(){
         
-        return ("Nom du Bateau: " + this.getNomBateau() +"\n Longueur: " + this.getLongueurBateau() +"\n Largeur: " + this.getLargeurBateau());
+        return (" Nom du Bateau: " + this.getNomBateau() +"\n Longueur: " + this.getLongueurBateau() +"\n Largeur: " + this.getLargeurBateau());
     }
     
     

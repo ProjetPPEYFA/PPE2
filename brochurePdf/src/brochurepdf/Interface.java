@@ -5,11 +5,17 @@
  */
 package brochurepdf;
 
+import com.itextpdf.text.DocumentException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -35,6 +41,7 @@ public class Interface extends javax.swing.JFrame {
          row[5]=list.get(i).getImageBatVoy();
          model.addRow(row); 
         }   
+        
     }
     
     public void reloadEquipement(int id){
@@ -48,7 +55,9 @@ public class Interface extends javax.swing.JFrame {
          row[0]=list.get(i).getIdEquip();
          row[1]=list.get(i).getLibEquip();
          model.addRow(row); 
-        }   
+        } 
+        
+        
     }
     
     public void initCombobox(){
@@ -323,6 +332,9 @@ public class Interface extends javax.swing.JFrame {
 
     private void jButtonReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonReloadActionPerformed
         reloadBateau();
+        DefaultTableModel model = (DefaultTableModel)jTableEquipement.getModel();
+        Object[] row = new Object[2];
+        model.setRowCount(0);
     }//GEN-LAST:event_jButtonReloadActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
@@ -406,7 +418,55 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_jTableBateauMouseClicked
 
     private void jButtonPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPdfActionPerformed
-        // TODO add your handling code here:
+       DBConnect con = new DBConnect();
+       ArrayList<BateauVoyageur>list = con.bateauList();
+       PDF unPdf = new PDF("les_bateaux.pdf","C:\\Users\\floki\\OneDrive\\Documents\\GitHub\\PPE2\\brochurePdf\\");
+       unPdf.Ouvrir();
+       
+        for(int i=0;i<list.size();i++)
+        {
+            System.out.println("C:\\Users\\floki\\OneDrive\\Documents\\GitHub\\PPE2\\brochurePdf\\imgBateau\\"+list.get(i).getImageBatVoy()+"");
+           try {
+               unPdf.ChargerImage("C:\\Users\\floki\\OneDrive\\Documents\\GitHub\\PPE2\\brochurePdf\\imgBateau\\"+list.get(i).getImageBatVoy()+"");
+           } catch (URISyntaxException ex) {
+               Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (IOException ex) {
+               Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (DocumentException ex) {
+               Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+           }
+         
+         ArrayList<Equipement>listEquip = con.equipementList(list.get(i).getIdBateau());
+         
+         for(int j=0;j<listEquip.size();j++)
+         {
+            int idEquipement = listEquip.get(j).getIdEquip();
+            String Libelle = listEquip.get(j).getLibEquip();
+
+            Equipement nouvel_equip = new Equipement(idEquipement,Libelle);   
+            
+            list.get(i).ajouterEquipement(nouvel_equip);
+         }
+         
+         String Contenu = list.get(i).versChaine();
+         
+         System.out.println(Contenu);
+         
+           try {
+               unPdf.ecrirePDF(Contenu);
+           } 
+           catch (FileNotFoundException ex) {
+               Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+           } 
+           catch (DocumentException ex) {
+               Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+           }
+           
+           
+         
+        }
+        unPdf.Fermer();
+        System.out.println("PDF SUCCESS");
     }//GEN-LAST:event_jButtonPdfActionPerformed
 
     private void jComboBoxBateauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxBateauActionPerformed
@@ -416,33 +476,35 @@ public class Interface extends javax.swing.JFrame {
     private void jButtonValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValiderActionPerformed
         String bateau = jComboBoxBateau.getSelectedItem().toString();
         char iBateau = bateau.charAt(0);
-        int idBateau = Character.getNumericValue(iBateau); 
+        int idBateau = Character.getNumericValue(iBateau);
         
         String equip = jComboBoxEquipement.getSelectedItem().toString();
         char iEquip = equip.charAt(0);
         int idEquip = Character.getNumericValue(iEquip); 
         
         
-        
-        
-        
-        System.out.println(""+idBateau+""+idEquip);
-        
         DBConnect con = new DBConnect();
         con.InsertEquipement(idBateau, idEquip);
+               
+        reloadEquipement(idBateau);
         
         
     }//GEN-LAST:event_jButtonValiderActionPerformed
 
     private void jButtonSupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSupprimerActionPerformed
         DBConnect con = new DBConnect();
-        int ligne = jTableEquipement.getSelectedRow();
-        String id = jTableEquipement.getModel().getValueAt(ligne, 0).toString();
-        int intId = Integer.parseInt(id);
         
-        String nomBateau = jTextFieldNom.getText();
+        String bateau = jComboBoxBateau.getSelectedItem().toString();
+        char iBateau = bateau.charAt(0);
+        int idBateau = Character.getNumericValue(iBateau);
         
-        con.DeleteEquipement(nomBateau, intId);
+        String equip = jComboBoxEquipement.getSelectedItem().toString();
+        char iEquip = equip.charAt(0);
+        int idEquip = Character.getNumericValue(iEquip);
+        
+        con.DeleteEquipement(idBateau, idEquip);
+        
+        reloadEquipement(idBateau);
         
         
     
