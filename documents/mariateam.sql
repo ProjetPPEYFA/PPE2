@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 22 avr. 2019 à 12:52
+-- Généré le :  lun. 20 mai 2019 à 09:56
 -- Version du serveur :  5.7.24
 -- Version de PHP :  7.2.14
 
@@ -47,9 +47,9 @@ CREATE TABLE IF NOT EXISTS `bateau` (
 --
 
 INSERT INTO `bateau` (`idBateau`, `NomBateau`, `VitesseMaxEnNoeud`, `LongueurEnMetre`, `LargeurEnMetre`, `NbPlacesMaxPassager`, `NbPlacesMaxVInf2`, `NbPlacesMaxVSup2`, `PathImage`) VALUES
-(1, 'Titanic', 30, 40, 10, 150, 40, 20, 'image/Titanic.jpg'),
-(3, 'Adonia', 15, 20, 7, 14, 12, 15, 'image/Ardonia.jpg'),
-(4, 'Balatik', 5.5, 15, 18, 100, 50, 25, 'image/Balatik.jpg');
+(1, 'Titanic', 30, 40, 10, 150, 40, 20, 'bateau1.jpg'),
+(3, 'Adonia', 15, 20, 7, 14, 12, 15, 'bateau2.jpg'),
+(4, 'Balatikk', 5.5, 15, 18, 100, 50, 25, 'bateau3.jpg');
 
 -- --------------------------------------------------------
 
@@ -65,14 +65,19 @@ CREATE TABLE IF NOT EXISTS `bateauequipe` (
   PRIMARY KEY (`id`),
   KEY `ct_equipement` (`idEquipement`),
   KEY `ct_bateau` (`idBateau`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `bateauequipe`
 --
 
 INSERT INTO `bateauequipe` (`id`, `idBateau`, `idEquipement`) VALUES
-(1, 1, 3);
+(1, 1, 3),
+(2, 4, 1),
+(3, 1, 4),
+(5, 1, 2),
+(7, 3, 2),
+(8, 4, 2);
 
 -- --------------------------------------------------------
 
@@ -124,11 +129,8 @@ CREATE TABLE IF NOT EXISTS `client` (
 --
 
 INSERT INTO `client` (`id`, `idClient`, `Role`, `NomClient`, `PrenomClient`, `CodePostal`, `Ville`, `Adresse`, `Mail`, `NbAchatsFidelisant`, `mdp`) VALUES
-(1, 'admin', 'admin', 'Administrateur', 'admin', '59000', 'Douai', 'marie team', 'admin@marieteam.fr', 0, 'admin'),
-(2, 'client', 'user', 'NomClient', 'PrenomClient', '59000', 'Ville', 'Adresse', 'Mail@test.fr', 0, 'mdp'),
-(7, 'M.Bedard', 'user', 'Bédard', 'Martin', '06600', 'ANTIBES', '83 Avenue De Marlioz', 'MartinBedard@Orange.fr', 0, 'Bedovitch06600'),
-(5, 'O.Corbin', 'user', 'Corbin', 'Oliver', '37200', 'Tours', '67, avenue Jean Portalis', 'OliverCorbin@gmail.com', 0, '00000000'),
-(6, 'S.Trudeau', 'user', 'Trudeau', 'Sophie', '92390', 'VILLENEUVE-LA-GARENNE', '60 place de Miremont', 'SophieTrudeau@gmail.com', 0, 'Praline62');
+(1, 'admin', 'admin', 'Administrateur', 'admin', '59000', 'Douai', 'marie team', 'admin@marieteam.fr', 50, 'admin'),
+(2, 'client', 'user', 'NomClient', 'PrenomClient', '59000', 'Ville', 'Adresse', 'Mail@test.fr', 0, 'mdp');
 
 -- --------------------------------------------------------
 
@@ -200,23 +202,15 @@ CREATE TABLE IF NOT EXISTS `liaison` (
   KEY `Liaison_Ports_FK` (`codePort`),
   KEY `Liaison_Ports0_FK` (`codePort_Ports`),
   KEY `Liaison_secteur1_FK` (`NomSecteur`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `liaison`
 --
 
 INSERT INTO `liaison` (`codeLiaison`, `distanceEnMiles`, `codePort`, `codePort_Ports`, `NomSecteur`) VALUES
-(11, 25.1, 2, 4, 'Belle-Ile-en-mer'),
-(15, 8.3, 1, 2, 'Belle-Ile-en-mer'),
-(16, 8, 1, 3, 'Belle-Ile-en-mer'),
-(17, 7.9, 3, 1, 'Belle-Ile-en-mer'),
-(19, 23.7, 4, 2, 'Belle-Ile-en-mer'),
-(21, 7.7, 6, 7, 'Ile de Groix'),
-(22, 7.4, 7, 6, 'Ile de Groix'),
-(24, 9, 2, 1, 'Belle-Ile-en-mer'),
-(25, 8.8, 1, 5, 'Houat'),
-(30, 8.8, 5, 1, 'Houat');
+(30, 8.8, 5, 1, 'Houat'),
+(31, 5.8, 4, 2, 'Belle-Ile-en-mer');
 
 -- --------------------------------------------------------
 
@@ -241,29 +235,15 @@ CREATE TABLE IF NOT EXISTS `periode` (
   `idLiaison` int(11) NOT NULL,
   PRIMARY KEY (`idPeriode`),
   KEY `idLiaison` (`idLiaison`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `periode`
 --
 
 INSERT INTO `periode` (`idPeriode`, `saison`, `dateDebut`, `dateFin`, `prixAdulte`, `prixJunior`, `prixEnfants`, `prixVinf4m`, `prixVinf5m`, `prixFourgon`, `prixCamping`, `prixCamion`, `idLiaison`) VALUES
-(1, 'Ete', '2019-06-03', '2019-09-01', 18, 11.1, 5.6, 86, 129, 189, 268, 205, 15),
-(2, 'Hiver', '2019-09-02', '2020-05-31', 20, 13.1, 7, 95, 142, 208, 295, 226, 15),
-(3, 'Ete', '2020-06-01', '2020-09-06', 19, 12.1, 6.4, 91, 136, 199, 282, 216, 15),
-(4, 'Hiver', '2019-06-03', '2019-09-02', 27.2, 17.3, 9.8, 129, 194, 284, 402, 308, 19),
-(5, 'Hiver', '2019-09-02', '2020-05-31', 29.3, 29.3, 10.6, 139, 209, 306, 434, 332, 19),
-(6, 'Ete', '2020-06-01', '2020-09-06', 28.5, 18.1, 10.2, 135, 203, 298, 422, 323, 19),
-(7, 'Hiver', '2019-04-01', '2019-09-02', 15, 9, 4.5, 79, 112, 147, 234, 189, 30),
-(8, 'Hiver', '2019-09-02', '2020-05-31', 17.5, 10, 5, 82, 134, 181, 257, 202, 30),
-(9, 'Ete', '2020-06-01', '2020-09-06', 16.5, 9.5, 4.25, 80, 123, 167, 246, 194, 30),
-(10, 'Ete', '2019-06-03', '2019-09-02', 12.5, 7.5, 2.5, 75, 125, 175, 250, 200, 21),
-(11, 'Hiver', '2019-09-02', '2020-05-31', 14.5, 8.75, 4.5, 82, 127, 186, 249, 204, 21),
-(12, 'Ete', '2020-06-01', '2020-09-06', 13, 7.5, 2.5, 77, 124, 186, 258, 202, 21),
-(13, 'Ete', '2019-06-03', '2019-09-00', 15, 8.5, 4.5, 82, 127, 186, 248, 197, 16),
-(14, 'Hiver', '2019-09-02', '2020-05-31', 16, 9, 5, 84, 129, 189, 253, 202, 16),
-(15, 'Ete', '2020-06-01', '2020-09-06', 15.5, 8.75, 4, 78, 122, 178, 241, 200, 16),
-(16, 'printemps', '2019-04-10', '2019-06-05', 15, 14, 10, 150, 120, 200, 300, 350, 30);
+(16, 'printemps', '2019-04-10', '2019-06-05', 15, 14, 10, 150, 120, 200, 300, 350, 30),
+(17, 'estivale', '2019-04-02', '2019-08-15', 15.99, 12, 10, 90, 140, 200, 250, 210, 31);
 
 -- --------------------------------------------------------
 
@@ -302,6 +282,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   `NumReservation` int(50) NOT NULL AUTO_INCREMENT,
   `MontantARegler` float NOT NULL,
   `date` date NOT NULL,
+  `dateTraversee` date DEFAULT NULL,
   `Heure` varchar(50) NOT NULL,
   `numeroIdentifiant` int(11) NOT NULL,
   `idClient` varchar(50) NOT NULL,
@@ -314,18 +295,14 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   `PlacesC2` int(11) NOT NULL DEFAULT '0',
   `PlacesC3` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`NumReservation`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `reservation`
 --
 
-INSERT INTO `reservation` (`NumReservation`, `MontantARegler`, `date`, `Heure`, `numeroIdentifiant`, `idClient`, `PlacesA1`, `PlacesA2`, `PlacesA3`, `PlacesB1`, `PlacesB2`, `PlacesC1`, `PlacesC2`, `PlacesC3`) VALUES
-(1, 45, '2019-03-25', '9:25', 12345, '12345', 0, 0, 0, 0, 0, 0, 0, 0),
-(2, 72, '2019-03-25', '9:52', 12345, '17349', 2, 1, 0, 0, 0, 1, 0, 0),
-(3, 243, '2019-03-25', '10:54', 12345, '2497', 4, 3, 1, 1, 0, 1, 0, 0),
-(5, 0, '2019-04-01', '10:52', 541197, 'S.Trudeau', 2, 1, 0, 1, 0, 0, 0, 0),
-(7, 15, '2019-04-12', '13:14', 1685429, 'admin', 1, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `reservation` (`NumReservation`, `MontantARegler`, `date`, `dateTraversee`, `Heure`, `numeroIdentifiant`, `idClient`, `PlacesA1`, `PlacesA2`, `PlacesA3`, `PlacesB1`, `PlacesB2`, `PlacesC1`, `PlacesC2`, `PlacesC3`) VALUES
+(28, 107.184, '2019-05-20', '2019-08-05', '11:53', 1685430, 'client', 2, 1, 0, 1, 0, 0, 0, 0);
 
 --
 -- Déclencheurs `reservation`
@@ -337,7 +314,7 @@ IF(SELECT idClient FROM Client WHERE NbAchatsFidelisant >= 100 and idClient = NE
 	SET NEW.MontantARegler = NEW.MontantARegler*0.80;
     UPDATE Client SET NbAchatsFidelisant = NbAchatsFidelisant-100 WHERE idClient = NEW.idClient;
 
-ELSEIF(SELECT numeroIdentifiant FROM traversee WHERE numeroIdentifiant = NEW.numeroIdentifiant AND DATEDIFF(curdate(),NEW.date) >= 60) IS NOT NULL THEN 
+ELSEIF(SELECT numeroIdentifiant FROM traversee WHERE numeroIdentifiant = NEW.numeroIdentifiant AND DATEDIFF(NEW.dateTraversee,curdate()) >= 60) IS NOT NULL THEN 
        UPDATE Client SET NbAchatsFidelisant = NbAchatsFidelisant+25 WHERE idClient = NEW.idClient;
 	END IF;
 END
@@ -384,19 +361,15 @@ CREATE TABLE IF NOT EXISTS `traversee` (
   `VehInf2mRestant` int(11) NOT NULL,
   `VehSup2mRestant` int(11) NOT NULL,
   PRIMARY KEY (`numeroIdentifiant`)
-) ENGINE=InnoDB AUTO_INCREMENT=1685430 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1685431 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `traversee`
 --
 
 INSERT INTO `traversee` (`numeroIdentifiant`, `date`, `heureDeDepart`, `NomBateau`, `codeLiaison`, `idPeriode`, `PassagerRestant`, `VehInf2mRestant`, `VehSup2mRestant`) VALUES
-(168427, '2020-03-27', '14:50', 'Aret\' Drop', 30, 8, 159, 8, 1),
-(381947, '2020-08-24', '10:30', 'Lek\' Tep', 21, 12, 167, 6, 1),
-(381949, '2020-08-24', '15:10', 'Cerjupt', 21, 12, 196, 3, 0),
-(541197, '2019-07-10', '07:45', 'Kor\' Ant', 15, 1, 235, 10, 2),
-(541198, '2019-07-10', '09:15', 'Ar Solen', 15, 1, 276, 5, 1),
-(1685429, '2019-04-24', '17:30', 'Vreh Lokt', 30, 16, 139, 50, 50);
+(1685429, '2019-07-26', '17:30', 'Vreh Lokt', 30, 16, 69, 48, 45),
+(1685430, '2019-08-05', '9:50', 'Titanic', 31, 17, 147, 49, 50);
 
 -- --------------------------------------------------------
 
