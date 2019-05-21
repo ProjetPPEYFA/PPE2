@@ -120,7 +120,7 @@ public class DBConnect {
     
     public void InsertBateau(String Nom,Double Largeur,Double Longeur,Double Vitesse,String path){     
         try{
-            String query = "INSERT INTO bateau (nomBateau,vitesseMaxEnNoeud,LongueurEnMetre,LargeurEnMetre,PathImage) VALUES ('"+Nom+"', "+Largeur+","+Longeur+","+Vitesse+",'"+path+"'); ";
+            String query = "INSERT INTO bateau (nomBateau,LargeurEnMetre,LongueurEnMetre,vitesseMaxEnNoeud,PathImage) VALUES ('"+Nom+"', "+Largeur+","+Longeur+","+Vitesse+",'"+path+"'); ";
             st.executeUpdate(query);
             System.out.println("Insert into Database"); 
         }catch(Exception ex){
