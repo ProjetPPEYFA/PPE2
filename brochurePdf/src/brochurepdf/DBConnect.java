@@ -24,6 +24,22 @@ public class DBConnect {
     private Statement st;
     private ResultSet rs;
     
+    public DBConnect(){
+        try{ 
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            //jdbc:mysql://localhost/db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+            con= DriverManager.getConnection("jdbc:mysql://localhost:3306/mariateam?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
+            st = con.createStatement();
+                    
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"Probleme de connexion à la bdd erreur : "+ex);
+        }   
+    }
+    
+    public Connection getConnect() {
+        return con;
+    }
+    
     public ArrayList<BateauVoyageur> bateauList(){
         ArrayList<BateauVoyageur> lesBateaux = new ArrayList();
         try{
@@ -101,18 +117,6 @@ public class DBConnect {
         }
         
         return lesBateaux;
-    }
-    
-    public DBConnect(){
-        try{ 
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            //jdbc:mysql://localhost/db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-            con= DriverManager.getConnection("jdbc:mysql://localhost:3306/mariateam?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
-            st = con.createStatement();
-                    
-        }catch(Exception ex){
-            JOptionPane.showMessageDialog(null,"Probleme de connexion à la bdd erreur : "+ex);
-        }   
     }
     
    
