@@ -62,14 +62,21 @@ public class Interface extends javax.swing.JFrame {
     
     public void initCombobox(){
         DBConnect con = new DBConnect();
+         jComboBoxEquipement.removeAllItems();
+        jComboBoxBateau.removeAllItems();
+        
         ArrayList<String>listEquip = con.equipementList();
-        ArrayList<String>listBateaux = con.bateauListString();
+        
+        
+        
         for(int i=0;i<listEquip.size();i++)
         {
             String item = listEquip.get(i);
             jComboBoxEquipement.addItem(item);
          
         }   
+        
+        ArrayList<String>listBateaux = con.bateauListString();
         
         for(int i=0;i<listBateaux.size();i++)
         {
@@ -217,6 +224,12 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
+        jComboBoxEquipement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxEquipementActionPerformed(evt);
+            }
+        });
+
         jButtonValider.setText("Ajouter");
         jButtonValider.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -335,6 +348,12 @@ public class Interface extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel)jTableEquipement.getModel();
         Object[] row = new Object[2];
         model.setRowCount(0);
+        initCombobox();
+        jTextFieldNom.setText("Nom");
+        jTextFieldLongueur.setText("Longueur");
+        jTextFieldLargeur.setText("Largeur");
+        jTextFieldVitesse.setText("Vitesse");
+        jTextFieldPath.setText("Chemin image");
     }//GEN-LAST:event_jButtonReloadActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
@@ -352,6 +371,7 @@ public class Interface extends javax.swing.JFrame {
         jTextFieldPath.setText("Chemin image");
         
         reloadBateau();
+        initCombobox();
         
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
@@ -374,6 +394,7 @@ public class Interface extends javax.swing.JFrame {
         
         con.ModifierBateau((int) intId,nom,doubleLongueur, doubleLargeur, doubleVitesse,path);
         reloadBateau();
+        initCombobox();
     }//GEN-LAST:event_jButtonModifierActionPerformed
 
     private void jButtonInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertActionPerformed
@@ -392,6 +413,7 @@ public class Interface extends javax.swing.JFrame {
         con.InsertBateau(nom, doubleLargeur, doubleLongueur, doubleVitesse, path);
         
         reloadBateau();
+        initCombobox();
         
     }//GEN-LAST:event_jButtonInsertActionPerformed
 
@@ -513,6 +535,10 @@ public class Interface extends javax.swing.JFrame {
     private void jTableEquipementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableEquipementMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jTableEquipementMouseClicked
+
+    private void jComboBoxEquipementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxEquipementActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxEquipementActionPerformed
 
     /**
      * @param args the command line arguments

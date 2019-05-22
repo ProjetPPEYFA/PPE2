@@ -291,13 +291,13 @@ start();
 	                    <div class="row flex-column">
 	                    <form action="" method="post">
 							
-						<div class="textfield-search col-sm-12 group mb-3"><input type="text" name="nbAdulte" id="nbAdulte" class="form-control" placeholder="Nombre d'adultes"></div>
-							
-						<div class="textfield-search col-sm-12 group mb-3"><input type="text" name="nbJunior" id="nbJunior" class="form-control" placeholder="Nombre de juniors"></div>
-							
-						<div class="textfield-search col-sm-12 group mb-3"><input type="text" name="nbEnfant" id="nbEnfant" class="form-control" placeholder="Nombre d'enfants"></div>
-							
-						<div class="textfield-search col-sm-12 group mb-3"><input type="text" name="vhInf4" id="vhInf4" class="form-control" placeholder="Voitures inferieure à 2 m"></div>
+                    <div class="textfield-search col-sm-12 group mb-3"><input type="text" name="nbAdulte" id="nbAdulte" class="form-control" placeholder="Nombre d'adultes"></div>
+                      
+                    <div class="textfield-search col-sm-12 group mb-3"><input type="text" name="nbJunior" id="nbJunior" class="form-control" placeholder="Nombre de juniors"></div>
+                      
+                    <div class="textfield-search col-sm-12 group mb-3"><input type="text" name="nbEnfant" id="nbEnfant" class="form-control" placeholder="Nombre d'enfants"></div>
+                      
+                    <div class="textfield-search col-sm-12 group mb-3"><input type="text" name="vhInf4" id="vhInf4" class="form-control" placeholder="Voitures inferieure à 2 m"></div>
 
            				 <div class="textfield-search col-sm-12 group mb-3"><input type="text" name="vhInf5" id="vhInf5" class="form-control" placeholder="Voitures supérieur à 2 m"></div>
 
@@ -371,6 +371,11 @@ start();
             $getTarif = $db->prepare('SELECT P.prixAdulte, P.prixJunior, P.prixEnfants, P.prixVinf4m, P.prixVinf5m, P.prixFourgon, P.prixCamping, P.prixCamion FROM traversee T, Periode P,Liaison L WHERE T.idPeriode = P.idPeriode AND T.numeroIdentifiant=? AND idLiaison = ? AND Date(Now()) BETWEEN P.dateDebut AND P.dateFin');
             $getTarif->execute([$radio,$Liaison]);
             $rowT = $getTarif->fetch();
+
+            $getDateTraversee = $db->prepare("SELECT date FROM traversee WHERE numeroIdentifiant=?");
+            $getDateTraversee->execute([$radio]);
+            $rowDateT = $getDateTraversee->fetch();
+            $dateTraversee = $rowDateT['date'];
 
 
 
@@ -452,11 +457,13 @@ start();
                   $getPoint = $db ->prepare('SELECT NbAchatsFidelisant FROM Client where idClient = ?');
                   $getPoint ->execute([$idClient]);
                   $rowPoint = $getPoint->fetch();
-           		  $point = $rowPoint['NbAchatsFidelisant'];
+                 $point = $rowPoint['NbAchatsFidelisant'];
+                 $prixAPayer = $tarifTotal;
 
            		  if ($point >= 100)
            		  {
-           		  	$reduc = $tarifTotal * 0.10;
+                   
+           		  	$reduc = $tarifTotal * 0.25;
 	           		echo'<li class="list-group-item d-flex justify-content-between bg-light">';
 				            echo'<div class="text-success">';
 					            echo'<h6 class="my-0">Promotion</h6>';
@@ -487,7 +494,7 @@ start();
   									document.getElementById("demo").innerHTML = 
   									'<?php 
 						            date_default_timezone_set('Europe/Paris');
-						            $MontantARegler=$tarifTotal;
+						            $MontantARegler=$prixAPayer;
 						            $dateReservation=date("Y-m-d");
 						            $heure=date("H:i");
 						            $PlacesA1 = $adulte;
@@ -498,16 +505,17 @@ start();
 						            $PlacesC1 = $fourgon;
 						            $PlacesC2 = $campingcar;
 						            $PlacesC3 = $camion;
-						            $NumeroIdentifiant=$radio;
+                        $NumeroIdentifiant=$radio;
 						            $idClient=$_SESSION['idClient'];
 
 						             $totalPassager = $PlacesA1+$PlacesA2+$PlacesA3;
 
-						             $sql=$db->prepare("INSERT INTO Reservation (MontantARegler,date,Heure,numeroIdentifiant,idClient,PlacesA1,PlacesA2,PlacesA3,PlacesB1,PlacesB2,PlacesC1,PlacesC2,PlacesC3) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-						             $sql->execute([$MontantARegler, $dateReservation,$heure, $NumeroIdentifiant, $idClient,$PlacesA1,$PlacesA2,$PlacesA3,$PlacesB1,$PlacesB2,$PlacesC1,$PlacesC2,$PlacesC3]);
+						             $sql=$db->prepare("INSERT INTO Reservation (MontantARegler,date,dateTraversee,Heure,numeroIdentifiant,idClient,PlacesA1,PlacesA2,PlacesA3,PlacesB1,PlacesB2,PlacesC1,PlacesC2,PlacesC3) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+						             $sql->execute([$MontantARegler, $dateReservation,$dateTraversee,$heure, $NumeroIdentifiant, $idClient,$PlacesA1,$PlacesA2,$PlacesA3,$PlacesB1,$PlacesB2,$PlacesC1,$PlacesC2,$PlacesC3]);
 			
-                        //$update=$db->query('UPDATE traversee SET PassagerRestant=PassagerRestant-'.$totalPassager.',VehInf2mRestant=VehInf2mRestant-'.$vhInf4.',VehSup2mRestant=VehSup2mRestant-'.$nbSup2M.' WHERE numeroIdentifiant='.$radio.'');
+                        $update=$db->query('UPDATE traversee SET PassagerRestant=PassagerRestant-'.$totalPassager.',VehInf2mRestant=VehInf2mRestant-'.$vhInf4.',VehSup2mRestant=VehSup2mRestant-'.$nbSup2M.' WHERE numeroIdentifiant='.$radio.'');
 
+                        
 						            echo'<h3 style="color:red;">Enregistrement reussi</h3>';
 
 						            echo'<a class="txt1 bo1 hov1" href="about.php">Revenir au menu</a>';
