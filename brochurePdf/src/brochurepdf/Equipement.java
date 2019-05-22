@@ -41,7 +41,7 @@ public class Equipement {
     }
     
     public void versChaine(){
-        
+        /**Affichage une despcription de l'équipement **/
         System.out.println("Libellé équipement" + getLibEquip());
     }
 }

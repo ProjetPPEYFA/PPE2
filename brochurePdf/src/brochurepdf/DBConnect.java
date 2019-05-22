@@ -25,6 +25,8 @@ public class DBConnect {
     private ResultSet rs;
     
     public ArrayList<BateauVoyageur> bateauList(){
+        /**Méthode qui renvoie les bateaux contenus dans la base de données sous forme de collection **/
+        
         ArrayList<BateauVoyageur> lesBateaux = new ArrayList();
         try{
             
@@ -48,6 +50,8 @@ public class DBConnect {
     
     
     public ArrayList<Equipement> equipementList(int id){
+        /**Renvoie la liste des équipements du bateau demandé sous forme d'une collection **/
+        
         ArrayList<Equipement> lesEquipements = new ArrayList();
         try{
             String query = "select Libelle,equipementbateau.id FROM equipementbateau,bateauequipe WHERE equipementbateau.id = bateauequipe.idEquipement AND bateauequipe.idBateau="+id+"  ORDER BY `equipementbateau`.`id` ASC";
@@ -70,6 +74,9 @@ public class DBConnect {
     }
     
     public ArrayList equipementList(){
+        /**Renvoie la liste des équipements qui existent dans la table Equipements **/
+        
+        
         ArrayList<String> lesEquipements = new ArrayList();
         try{
             String query = "SELECT * FROM equipementbateau";
@@ -87,6 +94,8 @@ public class DBConnect {
     }
     
     public ArrayList bateauListString(){
+        /**Renvoie la liste des bateaux dans la base de données **/
+        
         ArrayList<String> lesBateaux = new ArrayList();
         try{
             String query = "SELECT * FROM bateau";
@@ -119,6 +128,8 @@ public class DBConnect {
     
     
     public void InsertBateau(String Nom,Double Largeur,Double Longeur,Double Vitesse,String path){     
+        /**Méthode qui permet de rajouter un bateau dans la base de données **/
+        
         try{
             String query = "INSERT INTO bateau (nomBateau,vitesseMaxEnNoeud,LongueurEnMetre,LargeurEnMetre,PathImage) VALUES ('"+Nom+"', "+Largeur+","+Longeur+","+Vitesse+",'"+path+"'); ";
             st.executeUpdate(query);
@@ -128,7 +139,8 @@ public class DBConnect {
         }  
     }
     
-    public void InsertEquipement(int idBateau ,int idEquip){     
+    public void InsertEquipement(int idBateau ,int idEquip){    
+        /**Méthode qui permet de rajouter un équipement dans la base de données **/
         try{
             String query = "INSERT INTO bateauequipe (idBateau,idEquipement) VALUES ("+idBateau+","+idEquip+"); ";
             st.executeUpdate(query);
@@ -138,7 +150,8 @@ public class DBConnect {
         }  
     }
     
-    public void ModifierBateau(int id,String Nom,Double Largeur,Double Longeur,Double Vitesse,String path){     
+    public void ModifierBateau(int id,String Nom,Double Largeur,Double Longeur,Double Vitesse,String path){ 
+        /**Méthode qui permet de modifier un bateau dans la base de données **/
         try{
             String query = "UPDATE bateau SET NomBateau = '"+Nom+"',LongueurEnMetre = "+Largeur+",LargeurEnMetre = "+Longeur+",VitesseMaxEnNoeud = "+Vitesse+", PathImage = '"+path+"' WHERE idBateau="+id+"; ";
             st.executeUpdate(query);
@@ -149,6 +162,7 @@ public class DBConnect {
     }
     
     public void DeleteBateau(int id){
+        /** Permet de supprimer un bateau de la table Bateau **/
         try{
             String query = "DELETE FROM bateau WHERE idBateau="+id+" ";
             st.executeUpdate(query);
@@ -159,6 +173,7 @@ public class DBConnect {
     }
     
     public void DeleteEquipement(int idBateau,int idEquipement){
+        /** Permet de supprimer un équipement de la table Equipements **/
         try{
             String query = "DELETE FROM `bateauequipe` WHERE idEquipement = "+idEquipement+" and idBateau ="+idBateau+"";
             st.executeUpdate(query);
@@ -169,6 +184,7 @@ public class DBConnect {
     }
 
     void InsertEquipement(char idEquip, char idBateau) {
+        /** Permet de rajouter un équipement dans la table Equipements **/
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

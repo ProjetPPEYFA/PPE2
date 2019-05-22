@@ -30,18 +30,21 @@ public class PDF {
     Document unDoc;
     
     public PDF(String nom,String File){    
+        /** Constructeur permettant la création d'un nouveau fichier PDF **/
          try {
             this.name = nom;
             this.FILE = File;
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(this.FILE+nom));
             this.unDoc = document;
-        } catch (Exception e) {
+        } 
+         catch (Exception e) {
             e.printStackTrace();
         }
     }
     
     public void ecrirePDF(String chaine) throws FileNotFoundException, DocumentException{
+        /**Méthode permettant l'écriture dans le fichier **/
          Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
          Chunk chunk = new Chunk(chaine, font);
          this.unDoc.add(new Paragraph(chunk));
@@ -49,6 +52,7 @@ public class PDF {
     }
     
     public void ChargerImage(String ImageLink) throws URISyntaxException, BadElementException, IOException, DocumentException{
+        /**Insére une image dans le fichier **/
         
          //PdfWriter.getInstance(this.unDoc, new FileOutputStream(this.FILE+this.name));
          Image img = Image.getInstance(ImageLink);
@@ -56,10 +60,12 @@ public class PDF {
          this.unDoc.add(img);
     }
     public void Fermer(){
+        /**Fermeture du fichier **/
         this.unDoc.close();
     }
     
     public void Ouvrir(){
+        /** Ouverture du fichier **/
         this.unDoc.open();
     }
     
