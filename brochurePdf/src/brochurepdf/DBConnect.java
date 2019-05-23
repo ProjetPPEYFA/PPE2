@@ -25,6 +25,8 @@ public class DBConnect {
     private ResultSet rs;
     
     public DBConnect(){
+        
+        /**Crée une connexion à la base de données **/
         try{ 
             Class.forName("com.mysql.cj.jdbc.Driver");
             //jdbc:mysql://localhost/db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC

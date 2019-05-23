@@ -59,6 +59,7 @@ public class Bateau {
     
     
     public String versChaine(){
+        /**Affiche une description du bateau **/
         
         return (" Nom du Bateau: " + this.getNomBateau() +"\n Longueur: " + this.getLongueurBateau() +"\n Largeur: " + this.getLargeurBateau());
     }

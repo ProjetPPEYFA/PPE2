@@ -8,6 +8,7 @@ package brochurepdf;
 import com.itextpdf.text.DocumentException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,13 +20,16 @@ import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 
+
 /**
  *
  * @author mahammed.yazid
  */
 public class Interface extends javax.swing.JFrame {
 
+
     public void reloadBateau(){
+        /**Affiche la liste des bateaux **/
         DBConnect con = new DBConnect();        
         ArrayList<BateauVoyageur>list = con.bateauList();
         DefaultTableModel model = (DefaultTableModel)jTableBateau.getModel();
@@ -45,6 +49,9 @@ public class Interface extends javax.swing.JFrame {
     }
     
     public void reloadEquipement(int id){
+        
+        /**Affiche la liste des équipements**/
+        
         DBConnect con = new DBConnect();        
         ArrayList<Equipement>list = con.equipementList(id);
         DefaultTableModel model = (DefaultTableModel)jTableEquipement.getModel();
@@ -344,6 +351,7 @@ public class Interface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonReloadActionPerformed
+        /**Initialise le tableau**/
         reloadBateau();
         DefaultTableModel model = (DefaultTableModel)jTableEquipement.getModel();
         Object[] row = new Object[2];
@@ -357,6 +365,7 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonReloadActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
+        /**Supprime le bateau sélectionné**/
         DBConnect con = new DBConnect();
         int ligne = jTableBateau.getSelectedRow();
         String id = jTableBateau.getModel().getValueAt(ligne, 0).toString();
@@ -376,6 +385,7 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     private void jButtonModifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModifierActionPerformed
+        /**Permet de modifier un bateau **/
         DBConnect con = new DBConnect();
         int ligne = jTableBateau.getSelectedRow();
         
@@ -442,14 +452,14 @@ public class Interface extends javax.swing.JFrame {
     private void jButtonPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPdfActionPerformed
        DBConnect con = new DBConnect();
        ArrayList<BateauVoyageur>list = con.bateauList();
-       PDF unPdf = new PDF("les_bateaux.pdf","C:\\Users\\floki\\OneDrive\\Documents\\GitHub\\PPE2\\brochurePdf\\");
+       PDF unPdf = new PDF("les_bateaux.pdf","C:\\Users\\maison\\Documents\\GitHub\\PPE2\\brochurePdf\\");
        unPdf.Ouvrir();
        
         for(int i=0;i<list.size();i++)
         {
-            System.out.println("C:\\Users\\floki\\OneDrive\\Documents\\GitHub\\PPE2\\brochurePdf\\imgBateau\\"+list.get(i).getImageBatVoy()+"");
+            System.out.println("C:\\Users\\maison\\Documents\\GitHub\\PPE2\\brochurePdf\\imgBateau\\"+list.get(i).getImageBatVoy()+"");
            try {
-               unPdf.ChargerImage("C:\\Users\\floki\\OneDrive\\Documents\\GitHub\\PPE2\\brochurePdf\\imgBateau\\"+list.get(i).getImageBatVoy()+"");
+               unPdf.ChargerImage("C:\\Users\\maison\\Documents\\GitHub\\PPE2\\brochurePdf\\imgBateau\\"+list.get(i).getImageBatVoy()+"");
            } catch (URISyntaxException ex) {
                Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
            } catch (IOException ex) {

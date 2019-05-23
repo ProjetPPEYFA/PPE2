@@ -10,6 +10,7 @@ public class BateauFret extends Bateau {
     private double poidsMaxBatFret; 
     
     public BateauFret(int idB, String nomB, double longueurB, double largeurB, double poid) {
+        /**Crée un bateau de fret **/
         super(idB, nomB, longueurB, largeurB);
         this.poidsMaxBatFret = poid;
     }

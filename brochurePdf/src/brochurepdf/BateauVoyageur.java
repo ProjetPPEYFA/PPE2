@@ -13,6 +13,8 @@ import java.util.ArrayList;
  * @author mahammed.yazid
  */
 public class BateauVoyageur extends Bateau {
+    
+    /** Crée un bateau voyageur **/
     private double vitesseBatVoy;
     private String imageBatVoy;
     ArrayList<Equipement> lesEquipements = new ArrayList<Equipement>();
@@ -43,6 +45,9 @@ public class BateauVoyageur extends Bateau {
     }
     
     public void ajouterEquipement(Equipement nouvel_equip){
+        
+        /**Ajoute un équipement au bateau**/
+        
         this.lesEquipements.add(nouvel_equip);
     }
     
